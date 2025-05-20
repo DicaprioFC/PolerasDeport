@@ -14,7 +14,7 @@
 
 /* Establece el fondo del cuerpo de la página con un degradado de colores */
 body {
-    background: linear-gradient(120deg, black, #000066, blue);
+    background: linear-gradient(130deg, black, #000066, blue,#000066);
     margin: 0;
     /* Evita el espacio en blanco en el borde de la pantalla */
     overflow-x: hidden;
@@ -61,7 +61,7 @@ body {
 }
 
 .Nav-links li a:hover {
-    color: #007BFF;
+    color: #328E6E;
 }
 
 /* Enlaces de login/register a la derecha */

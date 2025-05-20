@@ -24,10 +24,10 @@ class ProductosSeeder extends Seeder
             ["nombre" => "Polera Nike del Chelsea", "precio" => 299, "marca" => "Nike", "imagen" => "imagenes/n10.png", "id_usuario" => 1],
             ["nombre" => "Polera Nike de la selección de Países Bajos", "precio" => 499, "marca" => "Nike", "imagen" => "imagenes/n11.png", "id_usuario" => 1],
             ["nombre" => "Polera Nike del Inter de Milán", "precio" => 399, "marca" => "Nike", "imagen" => "imagenes/n12.png", "id_usuario" => 1],
-            ["nombre" => "Polera de precalentamiento de Portugal", "precio" => 499, "marca" => "Nike", "imagen" => "imagenes/nike21.png", "id_usuario" => 1],
-            ["nombre" => "Segunda equipación de Portugal", "precio" => 499, "marca" => "Nike", "imagen" => "imagenes/nike22.png", "id_usuario" => 1],
-            ["nombre" => "Primera equipación de Portugal", "precio" => 599, "marca" => "Nike", "imagen" => "imagenes/nike23.png", "id_usuario" => 1],
-            ["nombre" => "Polera de Portugal", "precio" => 299, "marca" => "MarcaNike", "imagen" => "imagenes/nike24.png", "id_usuario" => 1],
+            //["nombre" => "Polera de precalentamiento de Portugal", "precio" => 499, "marca" => "Nike", "imagen" => "imagenes/nike21.png", "id_usuario" => 1],
+            //["nombre" => "Segunda equipación de Portugal", "precio" => 499, "marca" => "Nike", "imagen" => "imagenes/nike22.png", "id_usuario" => 1],
+            //["nombre" => "Primera equipación de Portugal", "precio" => 599, "marca" => "Nike", "imagen" => "imagenes/nike23.png", "id_usuario" => 1],
+            //["nombre" => "Polera de Portugal", "precio" => 299, "marca" => "Nike", "imagen" => "imagenes/nike24.png", "id_usuario" => 1],
 
 
             ["nombre" => "Polera del Real Madrid", "precio" => 299, "marca" => "Adidas", "imagen" => "imagenes/a1.png", "id_usuario" => 1],
@@ -42,10 +42,10 @@ class ProductosSeeder extends Seeder
             ["nombre" => "Polera de la Juventus", "precio" => 120, "marca" => "Adidas", "imagen" => "imagenes/adidas24.png", "id_usuario" => 1],
             ["nombre" => "Primera equipación de la Juventus", "precio" => 199, "marca" => "Adidas", "imagen" => "imagenes/adidas25.png", "id_usuario" => 1],
             ["nombre" => "Primera equipación de Alemania", "precio" => 499, "marca" => "Adidas", "imagen" => "imagenes/adidas27.png", "id_usuario" => 1],
-            ["nombre" => "Segunda equipación de España", "precio" => 499, "marca" => "Adidas", "imagen" => "imagenes/adidas28.png", "id_usuario" => 1],
-            ["nombre" => "Segunda equipación de Alemania", "precio" => 100, "marca" => "Adidas", "imagen" => "imagenes/adidas26.png", "id_usuario" => 1],
-            ["nombre" => "Primera equipación de Argentina", "precio" => 499, "marca" => "Adidas", "imagen" => "imagenes/adidas29.png", "id_usuario" => 1],
-            ["nombre" => "Segunda equipación de Argentina", "precio" => 499, "marca" => "Adidas", "imagen" => "imagenes/adidas30.png", "id_usuario" => 1],
+            //["nombre" => "Segunda equipación de España", "precio" => 499, "marca" => "Adidas", "imagen" => "imagenes/adidas28.png", "id_usuario" => 1],
+            //["nombre" => "Segunda equipación de Alemania", "precio" => 100, "marca" => "Adidas", "imagen" => "imagenes/adidas26.png", "id_usuario" => 1],
+            //["nombre" => "Primera equipación de Argentina", "precio" => 499, "marca" => "Adidas", "imagen" => "imagenes/adidas29.png", "id_usuario" => 1],
+            //["nombre" => "Segunda equipación de Argentina", "precio" => 499, "marca" => "Adidas", "imagen" => "imagenes/adidas30.png", "id_usuario" => 1],
 
 
 
@@ -61,12 +61,10 @@ class ProductosSeeder extends Seeder
             ["nombre" => "Polera Marathon de la selección de Ecuador", "precio" => 399, "marca" => "Marathon", "imagen" => "imagenes/m10.png", "id_usuario" => 1],
             ["nombre" => "Polera Marathon de Always Ready cuello V", "precio" => 199, "marca" => "Marathon", "imagen" => "imagenes/m11.png", "id_usuario" => 1],
             ["nombre" => "Polera Marathon de Aurora cuello redondo", "precio" => 299, "marca" => "Marathon", "imagen" => "imagenes/m12.png", "id_usuario" => 1],
-            ["nombre" => "Primera equipación de Always Ready", "precio" => 120, "marca" => "Marathon", "imagen" => "imagenes/marathon20.png", "id_usuario" => 1],
-            ["nombre" => "Primera equipación de Blooming", "precio" => 299, "marca" => "Marathon", "imagen" => "imagenes/marathon21.png", "id_usuario" => 1],
-            ["nombre" => "Primera equipación de The Strongest", "precio" => 299, "marca" => "Marathon", "imagen" => "imagenes/marathon22.png", "id_usuario" => 1],
-            ["nombre" => "Primera equipación de la selección boliviana", "precio" => 299, "marca" => "Marathon", "imagen" => "imagenes/marathon23.png", "id_usuario" => 1],
-
-
+            //["nombre" => "Primera equipación de Always Ready", "precio" => 120, "marca" => "Marathon", "imagen" => "imagenes/marathon20.png", "id_usuario" => 1],
+            //["nombre" => "Primera equipación de Blooming", "precio" => 299, "marca" => "Marathon", "imagen" => "imagenes/marathon21.png", "id_usuario" => 1],
+            //["nombre" => "Primera equipación de The Strongest", "precio" => 299, "marca" => "Marathon", "imagen" => "imagenes/marathon22.png", "id_usuario" => 1],
+            //["nombre" => "Primera equipación de la selección boliviana", "precio" => 299, "marca" => "Marathon", "imagen" => "imagenes/marathon23.png", "id_usuario" => 1],
 
 
 
@@ -85,10 +83,13 @@ class ProductosSeeder extends Seeder
             ["nombre" => "SHORT NIKE", "precio" => 299, "marca" => "MarcaNike", "imagen" => "imagenes/NIKE10.png", "id_usuario" => 1],
             ["nombre" => "POLERA DEPORTIVA NIKE DEL PARIS", "precio" => 499, "marca" => "MarcaNike", "imagen" => "imagenes/NIKE11.png", "id_usuario" => 1],
             ["nombre" => "POLERA DEL PARIS", "precio" => 399, "marca" => "MarcaNike", "imagen" => "imagenes/NIKE12.png", "id_usuario" => 1],
-            ["nombre" => "POLERA DEL ATLETICO DE MADRID", "precio" => 499, "marca" => "MarcaNike", "imagen" => "imagenes/NIKE32.png", "id_usuario" => 1],
-            ["nombre" => "POLERA DEL ATLETICO DE MADRID", "precio" => 499, "marca" => "MarcaNike", "imagen" => "imagenes/NIKE31.png", "id_usuario" => 1],
-            ["nombre" => "POLERA DEL PARIS", "precio" => 399, "marca" => "MarcaNike", "imagen" => "imagenes/NIKE33.png", "id_usuario" => 1],
-            ["nombre" => "POLERA DEL TOTTENHAM", "precio" => 499, "marca" => "MarcaNike", "imagen" => "imagenes/NIKE34.png", "id_usuario" => 1],
+            //["nombre" => "POLERA DEL ATLETICO DE MADRID", "precio" => 499, "marca" => "MarcaNike", "imagen" => "imagenes/NIKE32.png", "id_usuario" => 1],
+            //["nombre" => "POLERA DEL ATLETICO DE MADRID", "precio" => 499, "marca" => "MarcaNike", "imagen" => "imagenes/NIKE31.png", "id_usuario" => 1],
+            //["nombre" => "POLERA DEL PARIS", "precio" => 399, "marca" => "MarcaNike", "imagen" => "imagenes/NIKE33.png", "id_usuario" => 1],
+            //["nombre" => "POLERA DEL TOTTENHAM", "precio" => 499, "marca" => "MarcaNike", "imagen" => "imagenes/NIKE34.png", "id_usuario" => 1],
+
+
+
             ["nombre" => "POLERA DE BOLIVIA", "precio" => 199, "marca" => "MarcaMarathon", "imagen" => "imagenes/MARA1.png", "id_usuario" => 1],
             ["nombre" => "POLERA DE BLOMMING", "precio" => 499, "marca" => "MarcaMarathon", "imagen" => "imagenes/MARA2.png", "id_usuario" => 1],
             ["nombre" => "POLERA DE STRONGEST", "precio" => 399, "marca" => "MarcaMarathon", "imagen" => "imagenes/MARA3.png", "id_usuario" => 1],
@@ -101,10 +102,13 @@ class ProductosSeeder extends Seeder
             ["nombre" => "TENIS CASUAL", "precio" => 299, "marca" => "MarcaMarathon", "imagen" => "imagenes/MARA10.png", "id_usuario" => 1],
             ["nombre" => "SHORT DE ENTRENAMIENTO", "precio" => 120, "marca" => "MarcaMarathon", "imagen" => "imagenes/MARA11.png", "id_usuario" => 1],
             ["nombre" => "CONJUNTO COMPLETO", "precio" => 1500, "marca" => "MarcaMarathon", "imagen" => "imagenes/MARA12.png", "id_usuario" => 1],
-            ["nombre" => "ROMPE VIENTO DE LA SELECCION", "precio" => 1100, "marca" => "MarcaMarathon", "imagen" => "imagenes/MARA31.png", "id_usuario" => 1],
-            ["nombre" => "ROMPE VIENTO DE ORIENTE", "precio" => 999, "marca" => "MarcaMarathon", "imagen" => "imagenes/MARA32.png", "id_usuario" => 1],
-            ["nombre" => "ROMPE VIENTO DE STRONGEST", "precio" => 999, "marca" => "MarcaMarathon", "imagen" => "imagenes/MARA33.png", "id_usuario" => 1],
-            ["nombre" => "ROMPE VIENTO DE BLOMMING", "precio" => 999, "marca" => "MarcaMarathon", "imagen" => "imagenes/MARA34.png", "id_usuario" => 1],
+            //["nombre" => "ROMPE VIENTO DE LA SELECCION", "precio" => 1100, "marca" => "MarcaMarathon", "imagen" => "imagenes/MARA31.png", "id_usuario" => 1],
+            //["nombre" => "ROMPE VIENTO DE ORIENTE", "precio" => 999, "marca" => "MarcaMarathon", "imagen" => "imagenes/MARA32.png", "id_usuario" => 1],
+            //["nombre" => "ROMPE VIENTO DE STRONGEST", "precio" => 999, "marca" => "MarcaMarathon", "imagen" => "imagenes/MARA33.png", "id_usuario" => 1],
+            //["nombre" => "ROMPE VIENTO DE BLOMMING", "precio" => 999, "marca" => "MarcaMarathon", "imagen" => "imagenes/MARA34.png", "id_usuario" => 1],
+
+
+
             ["nombre" => "POLERA DE BOLIVAR", "precio" => 499, "marca" => "Otras", "imagen" => "imagenes/NIDEA3 (1).png", "id_usuario" => 1],
             ["nombre" => "POLERA JORDAN", "precio" => 199, "marca" => "Otras", "imagen" => "imagenes/OTRO1.png", "id_usuario" => 1],
             ["nombre" => "JORDAN DEPORTIVA", "precio" => 299, "marca" => "Otras", "imagen" => "imagenes/OTRO2.png", "id_usuario" => 1],
@@ -117,10 +121,10 @@ class ProductosSeeder extends Seeder
             ["nombre" => "SUDADERA", "precio" => 299, "marca" => "Otras", "imagen" => "imagenes/otra10.png", "id_usuario" => 1],
             ["nombre" => "POLERA", "precio" => 99, "marca" => "Otras", "imagen" => "imagenes/otra11.png", "id_usuario" => 1],
             ["nombre" => "POLERA ULTIMA EDICION", "precio" => 120, "marca" => "Otras", "imagen" => "imagenes/otra12.png", "id_usuario" => 1],
-            ["nombre" => "POLERA DEL MANCHESTER CITY", "precio" => 499, "marca" => "Otras", "imagen" => "imagenes/OTRA31.png", "id_usuario" => 1],
-            ["nombre" => "POLERA DEL BORUCIA DORMUND", "precio" => 199, "marca" => "Otras", "imagen" => "imagenes/OTRA32.png", "id_usuario" => 1],
-            ["nombre" => "POLERA DEL MILAN", "precio" => 399, "marca" => "Otras", "imagen" => "imagenes/OTRA33.png", "id_usuario" => 1],
-            ["nombre" => "SEGUNDA EQUIPACION DEL BOLIVAR", "precio" => 199, "marca" => "Otras", "imagen" => "imagenes/OTRA34.png", "id_usuario" => 1],
+            //["nombre" => "POLERA DEL MANCHESTER CITY", "precio" => 499, "marca" => "Otras", "imagen" => "imagenes/OTRA31.png", "id_usuario" => 1],
+            //["nombre" => "POLERA DEL BORUCIA DORMUND", "precio" => 199, "marca" => "Otras", "imagen" => "imagenes/OTRA32.png", "id_usuario" => 1],
+            //["nombre" => "POLERA DEL MILAN", "precio" => 399, "marca" => "Otras", "imagen" => "imagenes/OTRA33.png", "id_usuario" => 1],
+            //["nombre" => "SEGUNDA EQUIPACION DEL BOLIVAR", "precio" => 199, "marca" => "Otras", "imagen" => "imagenes/OTRA34.png", "id_usuario" => 1],
         ];
 
 

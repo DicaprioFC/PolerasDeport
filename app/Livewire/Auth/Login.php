@@ -43,6 +43,13 @@ class Login extends Component
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
+        // Aquí chequeamos si el usuario es admin (id=1)
+        if (Auth::user()->id === 1) {
+            // Redirige a la vista admin
+            $this->redirect(route('admin.dashboard'), true);
+            return;
+        }
+
         $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
     }
 
@@ -72,6 +79,6 @@ class Login extends Component
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
+        return Str::transliterate(Str::lower($this->email) . '|' . request()->ip());
     }
 }

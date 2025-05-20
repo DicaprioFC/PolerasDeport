@@ -22,6 +22,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 });
 
+use App\Http\Controllers\AdminController;
+
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::post('/admin/store', [AdminController::class, 'store'])->name('admin.store');
+});
+
+
 
 Route::get('/nikecliente', [ClienteController::class, 'productosNike']);
 Route::get('/adidascliente', [ClienteController::class, 'productosAdidas']);

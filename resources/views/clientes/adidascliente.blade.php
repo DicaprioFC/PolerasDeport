@@ -63,6 +63,60 @@
             font-weight: bold;
         }
 
+        .carrito-icono {
+            position: relative;
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .carrito-icono a {
+            text-decoration: none;
+            color: #333;
+            font-size: 24px;
+            transition: color 0.3s ease;
+        }
+
+        .carrito-icono a:hover {
+            color: #007bff;
+        }
+
+        .contador-carrito {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 50%;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-agregar-carrito {
+            display: inline-block;
+            background-color: #077A7D;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-agregar-carrito:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        .btn-agregar-carrito:active {
+            transform: scale(0.95);
+        }
+
+
+
         @media (max-width: 992px) {
             .producto {
                 width: calc(33.33% - 20px);
@@ -119,7 +173,7 @@
                 <h2>{{ $producto->nombre }}</h2>
                 <p>Precio: Bs {{ number_format($producto->precio, 2) }}</p>
                 <!-- En tu foreach de productos -->
-                <a href="{{ route('carrito.agregar', $producto->id) }}" class="btn btn-success">Agregar al carrito</a>
+                <a href="{{ route('carrito.agregar', $producto->id) }}" class="btn-agregar-carrito">Agregar al carrito</a>
 
             </div>
             @endforeach
