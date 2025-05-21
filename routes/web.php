@@ -49,6 +49,12 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+Route::get('/factura/{venta}', [CarritoController::class, 'factura'])->name('carrito.factura');
+
+Route::get('/compra-exitosa', function () {
+    return view('carrito.exito');
+})->name('carrito.exito');
+
 
 
 

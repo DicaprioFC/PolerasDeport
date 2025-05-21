@@ -14,7 +14,7 @@
 
 /* Establece el fondo del cuerpo de la página con un degradado de colores */
 body {
-    background: linear-gradient(130deg, black, #000066, blue,#000066);
+    background: linear-gradient(130deg, black, #000066, blue,#000066,black);
     margin: 0;
     /* Evita el espacio en blanco en el borde de la pantalla */
     overflow-x: hidden;

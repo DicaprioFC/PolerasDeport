@@ -9,6 +9,7 @@ use App\Models\Producto;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Venta;
 use App\Models\DetalleVenta;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CarritoController extends Controller
 {
@@ -17,8 +18,8 @@ class CarritoController extends Controller
         $producto = Producto::findOrFail($id);
 
         $carrito = Carrito::where('user_id', Auth::id())
-                          ->where('producto_id', $id)
-                          ->first();
+            ->where('producto_id', $id)
+            ->first();
 
         if ($carrito) {
             $carrito->cantidad += 1;
@@ -47,38 +48,49 @@ class CarritoController extends Controller
     }
 
     public function comprar()
-{
-    $userId = Auth::id();
-    $items = Carrito::with('producto')->where('user_id', $userId)->get();
+    {
+        $userId = Auth::id();
+        $items = Carrito::with('producto')->where('user_id', $userId)->get();
 
-    if ($items->isEmpty()) {
-        return redirect()->back()->with('error', 'El carrito está vacío.');
-    }
+        if ($items->isEmpty()) {
+            return redirect()->back()->with('error', 'El carrito está vacío.');
+        }
 
-    $total = 0;
-    foreach ($items as $item) {
-        $total += $item->cantidad * $item->producto->precio;
-    }
+        $total = 0;
+        foreach ($items as $item) {
+            $total += $item->cantidad * $item->producto->precio;
+        }
 
-    // Crear venta
-    $venta = Venta::create([
-        'user_id' => $userId,
-        'total' => $total,
-    ]);
+        // Crear venta
+        $venta = Venta::create([
+            'user_id' => $userId,
+            'total' => $total,
+        ]);
 
-    // Crear detalles de venta
-    foreach ($items as $item) {
-        DetalleVenta::create([
-            'venta_id' => $venta->id,
-            'producto_id' => $item->producto_id,
-            'cantidad' => $item->cantidad,
-            'precio' => $item->producto->precio,
+        // Crear detalles de venta
+        foreach ($items as $item) {
+            DetalleVenta::create([
+                'venta_id' => $venta->id,
+                'producto_id' => $item->producto_id,
+                'cantidad' => $item->cantidad,
+                'precio' => $item->producto->precio,
+            ]);
+        }
+
+        // Vaciar carrito
+        Carrito::where('user_id', $userId)->delete();
+
+        return view('carrito.exito', [
+            'venta' => $venta,
+            'detalles' => $venta->detalles,
         ]);
     }
+    public function factura($id)
+    {
+        $venta = Venta::with('detalles.producto')->findOrFail($id);
 
-    // Vaciar carrito
-    Carrito::where('user_id', $userId)->delete();
+        $pdf = Pdf::loadView('carrito.factura', ['venta' => $venta]);
 
-    return redirect()->route('dashboard')->with('success', 'Compra realizada con éxito');
-}
+        return $pdf->download('factura-compra.pdf');
+    }
 }
