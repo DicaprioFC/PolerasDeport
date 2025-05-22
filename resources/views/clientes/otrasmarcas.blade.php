@@ -4,142 +4,9 @@
 <head>
     <meta charset="UTF-8"> <!-- Configuración de la codificación de caracteres -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Configuración de la vista en dispositivos móviles -->
-    <link rel="stylesheet" href="estilo.css"> <!-- Enlaza una hoja de estilo CSS llamada "estilo.css" -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"> <!-- Enlaza una hoja de estilo CSS de Font Awesome -->
+    <link rel="stylesheet" href="poleras.css"> <!-- Enlaza una hoja de estilo CSS llamada "estilo.css" -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <!-- Enlaza una hoja de estilo CSS de Font Awesome -->
     <title>Ropa deportiva de la marca nike</title> <!-- Establece el título de la página como "inicio" -->
-
-    <style>
-        .titulo {
-            text-align: center;
-            font-size: 32px;
-            margin-top: 20px;
-            color: #333;
-        }
-
-        .contenedor-productos {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            margin: 40px auto;
-            width: 90%;
-        }
-
-        .producto {
-            width: calc(22% - 20px);
-            margin: 10px;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: background-color 0.3s ease;
-        }
-
-        .producto:hover {
-            transform: scale(1.05);
-        }
-
-        .producto img {
-            width: 250px;
-            height: 200px;
-            margin-bottom: 10px;
-            margin-top: 50px;
-        }
-
-        .producto h2 {
-            font-size: 18px;
-            margin-bottom: 8px;
-            color: white;
-        }
-
-        .producto p {
-            background-color: black;
-            color: white;
-            padding: 5px;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-
-        .carrito-icono {
-            position: relative;
-            display: inline-block;
-            margin-right: 20px;
-        }
-
-        .carrito-icono a {
-            text-decoration: none;
-            color: #333;
-            font-size: 24px;
-            transition: color 0.3s ease;
-        }
-
-        .carrito-icono a:hover {
-            color: #007bff;
-        }
-
-        .contador-carrito {
-            position: absolute;
-            top: -8px;
-            right: -10px;
-            background-color: red;
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
-            padding: 2px 6px;
-            border-radius: 50%;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-            transition: background-color 0.3s ease;
-        }
-
-
-
-        .btn-agregar-carrito {
-            display: inline-block;
-            background-color: #077A7D;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: bold;
-            text-decoration: none;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-agregar-carrito:hover {
-            background-color: #218838;
-            transform: scale(1.05);
-        }
-
-        .btn-agregar-carrito:active {
-            transform: scale(0.95);
-        }
-
-
-
-        @media (max-width: 992px) {
-            .producto {
-                width: calc(33.33% - 20px);
-                /* 3 por fila */
-            }
-        }
-
-        @media (max-width: 768px) {
-            .producto {
-                width: calc(50% - 20px);
-                /* 2 por fila */
-            }
-        }
-
-        @media (max-width: 480px) {
-            .producto {
-                width: 100%;
-                /* 1 por fila */
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -233,7 +100,7 @@
                 <div class="agua">
                     <img src="imagenes/Mi marca de agua.jpeg" alt=""> <!-- Imagen de la marca de agua -->
                 </div>
-                <span class="copiright">&copy;Dicaprio 2024</span> <!-- Derechos de autor -->
+                <span class="copiright">&copy;Dicaprio 2025</span> <!-- Derechos de autor -->
             </div>
         </footer>
 

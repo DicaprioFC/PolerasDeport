@@ -19,17 +19,12 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 25px 60px;
     background-color: #fff;
+    padding: 25px 60px;
     border-bottom: 2px solid #eee;
     position: sticky;
     top: 0;
     z-index: 1000;
-}
-
-/* Logo */
-.logo {
-    flex: 1;
 }
 
 .logo img {
@@ -41,13 +36,15 @@ body {
 
 .logo img {
     display: block;
-        height: 70px;
-        opacity: 1;
+    height: 70px;
+    opacity: 1;
 }
 
 .logo img {
-    filter: invert(1); /* Solo si el logo es blanco originalmente */
+    filter: invert(1);
+    /* Solo si el logo es blanco originalmente */
 }
+
 
 .main-nav {
     flex: 2;
@@ -94,46 +91,6 @@ body {
     width: 100%;
 }
 
-/* AUTH LINKS (Login & Registro) */
-.auth-links {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    gap: 20px;
-}
-
-.auth-links a {
-    text-decoration: none;
-    color: #111;
-    font-weight: 700;
-    font-size: 16px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    position: relative;
-    padding-bottom: 4px;
-    transition: color 0.3s ease;
-}
-
-.auth-links a::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 2px;
-    width: 0;
-    background: black; /* Cambiado a negro */
-    transition: width 0.3s ease;
-}
-
-.auth-links a:hover {
-    color: black;
-}
-
-.auth-links a:hover::after {
-    width: 100%;
-}
-
-
 
 /* RESPONSIVE HEADER */
 @media (max-width: 768px) {
@@ -177,7 +134,7 @@ body {
     width: 100vw;
     display: flex;
     justify-content: space-between;
-    margin-left: 0px;
+    margin-left: 0;
 }
 
 .objetos img {
@@ -262,13 +219,15 @@ body {
 .producto {
     border: none;
     border-radius: 15px;
+    justify-content: center;
     text-align: center;
     padding: 20px;
     background: grey;
-    /* Gris claro para productos */
+    /* Gris claro para los productos */
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     cursor: pointer;
+    display: flex;
 }
 
 .producto:hover {
@@ -277,8 +236,9 @@ body {
 }
 
 .producto img {
-    width: 200px;
+    width: 250px;
     height: 200px;
+
 }
 
 .producto h2 {
@@ -288,20 +248,10 @@ body {
     color: #111;
 }
 
-.producto a {
-    text-decoration: none;
-    color: inherit;
-}
-
-.producto a:hover h2 {
-    color: black;
-}
-
-
 /* FOOTER */
 .footer {
     background-color: #fff;
-    color: #fff;
+    color: #000;
     padding: 50px 30px;
 }
 
@@ -357,6 +307,7 @@ body {
 .copiright {
     display: flex;
     justify-content: center;
+    text-align: center;
     color: black;
     font-size: 14px;
     margin-top: 15px;
@@ -366,7 +317,7 @@ body {
 @media (prefers-color-scheme: dark) {
     body {
         background: #fff;
-        color: #eee;
+        color: #000;
     }
 
     .header {
@@ -383,10 +334,12 @@ body {
         color: black;
     }
 
+
     .footer {
         background-color: #fff;
         color: black;
     }
+
     .footer-links a,
     .footer-links a:hover,
     .social-link a,
@@ -403,6 +356,7 @@ body {
     }
 
     .agua img {
-        filter: invert(1); /* Solo si el logo es blanco originalmente */
+        filter: invert(1);
+        /* Solo si el logo es blanco originalmente */
     }
 }

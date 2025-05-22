@@ -5,7 +5,7 @@
     <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="estilo.css"> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>inicio sin usuarios</title>
 
 </head>
@@ -19,7 +19,7 @@
     </div>
 
     <nav class="main-nav"> <!-- Menú de navegación -->
-        <ul class="Nav-links responsive-links">
+        <ul class="Nav-links">
             <li><a href="{{ url('/productos') }}">PRODUCTOS</a></li>
             <li><a href="pedidos.php">PEDIDOS</a></li>
             <li><a href="como llegar.php">COMO LLEGAR</a></li>
@@ -41,16 +41,16 @@
 </header>
 
         <div class="objetos"> <!-- Contenedor de objetos -->
-            <img src="imagenes/blommin.jpg" alt=""> <!-- Imagen -->
-            <img src="imagenes/oriente.jpg" alt=""> <!-- Otra imagen -->
+            <img src="imagenes/banermara.jpg" alt=""> <!-- Imagen -->
+            <img src="imagenes/banermara2.jpg" alt=""> <!-- Otra imagen -->
         </div>
 
         <div class="slider">
             <ul>
-                <li><img src="imagenes/blommin.jpg" alt=""></li>
+                <li><img src="imagenes/banermara3.jpg" alt=""></li>
                 <li><img src="imagenes/oriente.jpg"></li>
-                <li><img src="imagenes/PUMA.png" alt=""></li>
-                <li><img src="imagenes/NIKE.jpg" alt=""></li>
+                <li><img src="imagenes/banermara.jpg" alt=""></li>
+                <li><img src="imagenes/banermara2.jpg" alt=""></li>
                 <li><img src="imagenes/NIKEEEE.jpg" alt=""></li>
                 <li><img src="imagenes/Bolivar.jpg" alt=""></li>
             </ul>
@@ -65,7 +65,6 @@
                 <a href="{{ url('/nikecliente') }}"> <!-- Enlace a la página de tazas -->
                     <h2>POLERAS NIKE</h2> <!-- Título del producto -->
                     <img src="imagenes/NIKE7.png" alt=""> <!-- Imagen del producto -->
-                    <p><strong> OFERTAS</strong></p> <!-- Descripción del producto -->
                 </a>
             </div>
 
@@ -74,7 +73,6 @@
                 <a href="{{ url('/adidascliente') }}"> <!-- Enlace a la página de tazas -->
                     <h2>POLERAS ADIDAS</h2> <!-- Título del producto -->
                     <img src="imagenes/adidas1.png" alt=""> <!-- Imagen del producto -->
-                    <p><strong>OFERTAS</strong></p> <!-- Descripción del producto -->
                 </a>
             </div>
 
@@ -83,7 +81,6 @@
                 <a href="{{ url('/marathoncliente') }}"> <!-- Enlace a la página de tazas -->
                     <h2>POLERAS MARATHON</h2> <!-- Título del producto -->
                     <img src="imagenes/marathon.png" alt=""> <!-- Imagen del producto -->
-                    <p><strong>OFERTAS</strong></p> <!-- Descripción del producto -->
                 </a>
             </div>
 
@@ -92,7 +89,6 @@
                 <a href="{{ url('/marcamaracli') }}"> <!-- Enlace a la página de tazas -->
                     <h2>MARCA MARATHON</h2> <!-- Título del producto -->
                     <img src="imagenes/marathon.logo.jpg" alt=""> <!-- Imagen del producto -->
-                    <p><strong>OFERTAS</strong></p> <!-- Descripción del producto -->
                 </a>
             </div>
 
@@ -101,7 +97,6 @@
                 <a href="{{ url('/marcanikecli') }}"> <!-- Enlace a la página de tazas -->
                     <h2>MARCA NIKE</h2> <!-- Título del producto -->
                     <img src="imagenes/logo nike.png" alt=""> <!-- Imagen del producto -->
-                    <p><strong>OFERTAS</strong></p> <!-- Descripción del producto -->
                 </a>
             </div>
 
@@ -110,7 +105,6 @@
                 <a href="{{ url('/otrasmarcas') }}"> <!-- Enlace a la página de tazas -->
                     <h2>OTRAS MARCAS </h2> <!-- Título del producto -->
                     <img src="imagenes/marcas.jpg" alt=""> <!-- Imagen del producto -->
-                    <p><strong>OFERTAS</strong></p> <!-- Descripción del producto -->
                 </a>
             </div>
 
@@ -172,7 +166,7 @@
             <div class="agua">
                 <img src="imagenes/Mi marca de agua.jpeg" alt=""> <!-- Imagen de la marca de agua -->
             </div>
-            <span class="copiright">&copy;Dicaprio 2024</span> <!-- Derechos de autor -->
+            <span class="copiright">&copy;Dicaprio 2025</span> <!-- Derechos de autor -->
         </div>
     </footer>
 
