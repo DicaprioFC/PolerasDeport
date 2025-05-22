@@ -19,7 +19,7 @@
                 <ul class="Nav-links responsive-links"> <!-- Lista de enlaces de navegación con la clase "responsive-links" -->
                     <li><a href="{{ route('dashboard') }}">INICIO</a></li>
                     <li><a href="{{ url('/productos') }}">PRODUCTOS</a></li>
-                    <li><a href="pedidos.php">PEDIDOS</a></li> <!-- Enlace a "tipo_producto.html" -->
+                    <li><a href="{{ url('/ofertas') }}">OFERTAS</a></li> <!-- Enlace a "tipo_producto.html" -->
                     <li><a href="como llegar.php">COMO LLEGAR</a></li> <!-- Enlace a "ubicacion.html" -->
                     <div class="carrito-icono">
                         <a href="{{ route('carrito.mostrar') }}">
@@ -31,7 +31,7 @@
             </nav>
         </header>
 
-        <h1 class="titulo">Productos Marathon</h1>
+        <h1 class="titulo">Poleras Marathon</h1>
         <div class="contenedor-productos">
             @foreach ($productos as $producto)
             <div class="producto">

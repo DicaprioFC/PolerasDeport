@@ -57,4 +57,37 @@ class ClienteController extends Controller
 
         return view('clientes/otrasmarcas', compact('productos'));
     }
+    public function productosOfertas()
+    {
+        $productos = DB::table('productos')
+            ->where('marca', 'Ofertas')
+            ->get();
+
+        return view('clientes/ofertas', compact('productos'));
+    }
+
+
+
+    public function porMarca()
+    {
+        // Obtener las marcas distintas
+        $marcas = DB::table('productos')
+            ->select('marca')
+            ->distinct()
+            ->orderBy('marca')
+            ->get();
+
+        // Obtener productos agrupados por marca
+        $productosPorMarca = [];
+        foreach ($marcas as $marca) {
+            $productos = DB::table('productos')
+                ->where('marca', $marca->marca)
+                ->orderByDesc('id')
+                ->get();
+
+            $productosPorMarca[$marca->marca] = $productos;
+        }
+
+        return view('clientes.productos', compact('productosPorMarca'));
+    }
 }

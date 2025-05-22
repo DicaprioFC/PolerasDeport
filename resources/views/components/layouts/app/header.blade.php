@@ -22,7 +22,7 @@
             PRODUCTOS
         </flux:navbar.item>
 
-        <flux:navbar.item href="pedidos.php" icon="clipboard-document">
+        <flux:navbar.item href="{{ url('/ofertas') }}" icon="clipboard-document">
             PEDIDOS
         </flux:navbar.item>
 

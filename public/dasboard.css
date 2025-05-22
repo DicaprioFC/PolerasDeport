@@ -222,7 +222,7 @@ body {
     justify-content: center;
     text-align: center;
     padding: 20px;
-    background: grey;
+    background: #DDDDDD;
     /* Gris claro para los productos */
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);

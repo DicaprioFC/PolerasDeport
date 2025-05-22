@@ -294,7 +294,7 @@ body {
 }
 
 .producto {
-    background-color: grey;
+    background-color: #DDDDDD;
     border-radius: 20px;
     padding: 20px;
     width: 250px;
@@ -348,6 +348,37 @@ body {
     color: #000;
     border: 2px solid #000;
 }
+
+
+/*esto es para los descuentos nomas */
+.imagen-con-descuento {
+    position: relative;
+    display: inline-block;
+}
+
+.etiqueta-descuento {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: red;
+    color: white;
+    padding: 5px 10px;
+    font-weight: bold;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.precio-anterior {
+    text-decoration: line-through;
+    color: gray;
+    margin-right: 10px;
+}
+
+.precio-descuento {
+    color: black;
+    font-weight: bold;
+}
+
 
 /* Responsive productos */
 @media (max-width: 768px) {

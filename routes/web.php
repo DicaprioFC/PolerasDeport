@@ -37,6 +37,8 @@ Route::get('/marathoncliente', [ClienteController::class, 'productosMarathon']);
 Route::get('/marcamaracli', [ClienteController::class, 'productosMarcaMarathon']);
 Route::get('/marcanikecli', [ClienteController::class, 'productosMarcaNike']);
 Route::get('/otrasmarcas', [ClienteController::class, 'productosOtrasMarcas']);
+Route::get('/ofertas', [ClienteController::class, 'productosOfertas']);
+Route::get('/productos', [ClienteController::class, 'porMarca'])->name('productosPorMarca');
 
 
 use App\Http\Controllers\CarritoController;
@@ -54,7 +56,6 @@ Route::get('/factura/{venta}', [CarritoController::class, 'factura'])->name('car
 Route::get('/compra-exitosa', function () {
     return view('carrito.exito');
 })->name('carrito.exito');
-
 
 
 

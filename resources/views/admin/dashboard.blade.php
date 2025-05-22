@@ -86,7 +86,8 @@
             <option value="Marathon">Marathon</option>
             <option value="MarcaNike">MarcaNike</option>
             <option value="MarcaMarathon">MarcaMarathon</option>
-            <option value="otras">Otras</option>
+            <option value="Otras">Otras</option>
+            <option value="Ofertas">Ofertas</option>
         </select>
     </div>
 

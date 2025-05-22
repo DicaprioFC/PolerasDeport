@@ -20,7 +20,7 @@
                 <nav class="main-nav"> <!-- Menú de navegación -->
                     <ul class="Nav-links">
                         <li><a href="{{ url('/productos') }}">PRODUCTOS</a></li>
-                        <li><a href="pedidos.php">PEDIDOS</a></li>
+                        <li><a href="{{ url('/ofertas') }}">OFERTAS</a></li>
                         <li><a href="COMOLLEGAR.php">COMO LLEGAR</a></li>
                     </ul>
                 </nav>

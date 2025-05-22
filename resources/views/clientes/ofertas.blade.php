@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Configuración de la vista en dispositivos móviles -->
     <link rel="stylesheet" href="poleras.css"> <!-- Enlaza una hoja de estilo CSS llamada "estilo.css" -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <!-- Enlaza una hoja de estilo CSS de Font Awesome -->
-    <title>Ropa deportiva de la marca nike</title> <!-- Establece el título de la página como "inicio" -->
+    <title>Ofertas De Ropa Deportiva</title> <!-- Establece el título de la página como "inicio" -->
 </head>
 
 <body>
@@ -19,7 +19,6 @@
                 <ul class="Nav-links responsive-links"> <!-- Lista de enlaces de navegación con la clase "responsive-links" -->
                     <li><a href="{{ route('dashboard') }}">INICIO</a></li>
                     <li><a href="{{ url('/productos') }}">PRODUCTOS</a></li>
-                    <li><a href="{{ url('/ofertas') }}">OFERTAS</a></li> <!-- Enlace a "tipo_producto.html" -->
                     <li><a href="como llegar.php">COMO LLEGAR</a></li> <!-- Enlace a "ubicacion.html" -->
                     <div class="carrito-icono">
                         <a href="{{ route('carrito.mostrar') }}">
@@ -29,20 +28,26 @@
                     </div>
                 </ul>
             </nav>
+
         </header>
 
-        <h1 class="titulo">Productos de la marca Nike</h1>
+        <h1 class="titulo">Ofertas</h1>
         <div class="contenedor-productos">
             @foreach ($productos as $producto)
             <div class="producto">
-                <img src="/{{ $producto->imagen }}" alt="Imagen del producto">
+                <div class="imagen-con-descuento">
+                    <img src="/{{ $producto->imagen }}" alt="Imagen del producto">
+                    <span class="etiqueta-descuento">-40%</span> <!-- Etiqueta de descuento -->
+                </div>
                 <h2>{{ $producto->nombre }}</h2>
-                <p>Precio: Bs {{ number_format($producto->precio, 2) }}</p>
-                <!-- En tu foreach de productos -->
+                <p>
+                    <span class="precio-anterior">Bs {{ number_format($producto->precio / 0.7, 2) }}</span>
+                    <span class="precio-descuento">Bs {{ number_format($producto->precio, 2) }}</span>
+                </p>
                 <a href="{{ route('carrito.agregar', $producto->id) }}" class="btn-agregar-carrito">Agregar al carrito</a>
-
             </div>
             @endforeach
+
         </div>
 
 
@@ -86,15 +91,12 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Marca de agua abajo del footer y sello de copiright -->
                 <div class="agua">
                     <img src="imagenes/Mi marca de agua.jpeg" alt=""> <!-- Imagen de la marca de agua -->
                 </div>
                 <span class="copiright">&copy;Dicaprio 2025</span> <!-- Derechos de autor -->
             </div>
         </footer>
-
 
 </body>
 
