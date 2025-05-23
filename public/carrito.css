@@ -1,0 +1,129 @@
+/* Mover esto a carrito.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 40px;
+    background-color: #f8f8f8;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.contenedor-carrito {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.tabla-carrito {
+    flex: 2;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    overflow-x: auto; /* para que la tabla pueda hacer scroll horizontal si es necesario */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 400px; /* evita que la tabla se haga demasiado pequeña */
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+    text-align: center;
+}
+
+td img {
+    width: 80px;
+    border-radius: 10px;
+}
+
+.resumen {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.resumen h3 {
+    margin-bottom: 20px;
+}
+
+.cantidad-control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.cantidad-control span {
+    width: 30px;
+    display: inline-block;
+}
+
+.eliminar-btn {
+    background: none;
+    border: none;
+    color: #e00;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.btn-pago {
+    margin-top: 20px;
+    padding: 15px;
+    width: 100%;
+    background: black;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+/* Responsividad */
+@media (max-width: 900px) {
+    body {
+        margin: 20px;
+    }
+    .contenedor-carrito {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .tabla-carrito, .resumen {
+        flex: unset;
+        width: 100%;
+        padding: 15px;
+    }
+    table {
+        min-width: 300px;
+    }
+}
+
+@media (max-width: 500px) {
+    th, td {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+    td img {
+        width: 60px;
+    }
+    .cantidad-control span {
+        width: 25px;
+    }
+    .btn-pago {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+}
