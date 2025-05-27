@@ -66,6 +66,8 @@ Route::get('/carrito', function () {
 })->middleware('auth')->name('carrito');
 
 
+
+
 Route::get('/api/poleras', function (Request $request) {
     $marca = $request->query('marca');
 

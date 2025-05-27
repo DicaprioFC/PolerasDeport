@@ -248,6 +248,86 @@ body {
     color: #111;
 }
 
+
+.grid-galeria {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 1500px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.card img {
+    width: 1300px;
+    height: 800px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+    border-radius: 10px;
+}
+
+.card:hover img {
+    transform: scale(1.03);
+}
+
+.overlay {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: white;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 20px;
+    border-radius: 8px;
+    backdrop-filter: blur(4px);
+    max-width: 80%;
+}
+
+.overlay h4 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.overlay p {
+    margin: 5px 0 10px;
+    font-size: 1rem;
+}
+
+.overlay a {
+    display: inline-block;
+    background: white;
+    color: black;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background 0.3s ease;
+}
+
+.overlay a:hover {
+    background: #e5e5e5;
+}
+
+@media (max-width: 768px) {
+    .grid-galeria {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+
+
+
+
+
 /* FOOTER */
 .footer {
     background-color: #fff;

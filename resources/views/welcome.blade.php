@@ -2,9 +2,9 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <meta charset="UTF-8"> 
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="estilo.css"> 
+    <link rel="stylesheet" href="estilo.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>inicio sin usuarios</title>
 
@@ -13,32 +13,32 @@
 <body>
 
     <div class="container"> <!-- Contenedor principal de la página -->
-    <header class="header"> <!-- Cabecera de la página -->
-    <div class="logo">
-        <img src="imagenes/Mi marca de agua.jpeg" alt=""> <!-- Imagen de logo -->
-    </div>
+        <header class="header"> <!-- Cabecera de la página -->
+            <div class="logo">
+                <img src="imagenes/Mi marca de agua.jpeg" alt=""> <!-- Imagen de logo -->
+            </div>
 
-    <nav class="main-nav"> <!-- Menú de navegación -->
-        <ul class="Nav-links">
-            <li><a href="{{ url('/productos') }}">PRODUCTOS</a></li>
-            <li><a href="{{ url('/ofertas') }}">OFERTAS</a></li>
-            <li><a href="como llegar.php">COMO LLEGAR</a></li>
-        </ul>
+            <nav class="main-nav"> <!-- Menú de navegación -->
+                <ul class="Nav-links">
+                    <li><a href="{{ url('/productos') }}">PRODUCTOS</a></li>
+                    <li><a href="{{ url('/ofertas') }}">OFERTAS</a></li>
+                    <li><a href="como llegar.php">COMO LLEGAR</a></li>
+                </ul>
 
-        @if (Route::has('login'))
-        <div class="auth-links">
-            @auth
-                <!--<a href="{{ url('/dashboard') }}">Dashboard</a>-->
-            @else
-                <a href="{{ route('login') }}">Log in</a>
-                @if (Route::has('register'))
+                @if (Route::has('login'))
+                <div class="auth-links">
+                    @auth
+                    <!--<a href="{{ url('/dashboard') }}">Dashboard</a>-->
+                    @else
+                    <a href="{{ route('login') }}">Log in</a>
+                    @if (Route::has('register'))
                     <a href="{{ route('register') }}">Register</a>
+                    @endif
+                    @endauth
+                </div>
                 @endif
-            @endauth
-        </div>
-        @endif
-    </nav>
-</header>
+            </nav>
+        </header>
 
         <div class="objetos"> <!-- Contenedor de objetos -->
             <img src="imagenes/banermara.jpg" alt=""> <!-- Imagen -->
@@ -47,8 +47,8 @@
 
         <div class="slider">
             <ul>
+                <li><img src="imagenes/banermara4.jpg"></li>
                 <li><img src="imagenes/banermara3.jpg" alt=""></li>
-                <li><img src="imagenes/oriente.jpg"></li>
                 <li><img src="imagenes/banermara.jpg" alt=""></li>
                 <li><img src="imagenes/banermara2.jpg" alt=""></li>
                 <li><img src="imagenes/NIKEEEE.jpg" alt=""></li>
@@ -108,10 +108,17 @@
                 </a>
             </div>
 
+
+
             <!-- (Puedes seguir repitiendo esta estructura para más productos si es necesario) -->
         </div>
     </main>
-    <!-- Crea una sección de botones de redes sociales con enlaces a diferentes sitios web -->
+
+
+    <div class="objetos"> <!-- Contenedor de objetos -->
+        <img src="imagenes/banermara4.jpg" alt=""> <!-- Imagen -->
+        <img src="imagenes/banermara5.jpg" alt=""> <!-- Otra imagen -->
+    </div>
 
     <footer>
         <div class="footer"> <!-- Contenedor del pie de página -->

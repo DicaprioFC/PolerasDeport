@@ -61,6 +61,7 @@ class CarritoController extends Controller
             $total += $item->cantidad * $item->producto->precio;
         }
 
+        
         // Crear venta
         $venta = Venta::create([
             'user_id' => $userId,

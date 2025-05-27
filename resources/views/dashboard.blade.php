@@ -33,8 +33,8 @@
 
             <div class="slider">
                 <ul>
-                    <li><img src="imagenes/banermara3.jpg" alt=""></li>
-                    <li><img src="imagenes/oriente.jpg"></li>
+                    <li><img src="imagenes/banermara4.jpg" alt=""></li>
+                    <li><img src="imagenes/banermara3.jpg"></li>
                     <li><img src="imagenes/banermara.jpg" alt=""></li>
                     <li><img src="imagenes/banermara2.jpg" alt=""></li>
                     <li><img src="imagenes/NIKEEEE.jpg" alt=""></li>
@@ -88,6 +88,47 @@
                 </div>
             </div>
         </main>
+
+
+
+        <div class="grid-galeria">
+            <div class="card">
+                <img src="imagenes/seleccion1.png" alt="Nike Running">
+                <div class="overlay">
+                    <h4>Centenario Boliviano</h4>
+                    <p>Polera de la selccion Boliviana edicion limitada</p>
+                    <a href="{{ url('/marathoncliente') }}">Comprar</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="imagenes/sele2.jpg" alt="Nike Moda">
+                <div class="overlay">
+                    <h4>BolivarMania</h4>
+                    <p>Polera centenario edicion Limitada</p>
+                    <a href="{{ url('/otrasmarcas') }}">Comprar</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="imagenes/sele3.jpg" alt="Nike Street">
+                <div class="overlay">
+                    <h4>BolivarMania</h4>
+                    <p>Polera centenario edicion Limitada</p>
+                    <a href="{{ url('/otrasmarcas') }}">Comprar</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="imagenes/sele4.png" alt="Nike Training">
+                <div class="overlay">
+                    <h4>Polera del Al-Nassr</h4>
+                    <p>Edicion Limitada</p>
+                    <a href="{{ url('/nikecliente') }}">Comprar</a>
+                </div>
+            </div>
+        </div>
+
 
         <footer>
             <div class="footer"> <!-- Contenedor del pie de página -->
