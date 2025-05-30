@@ -11,6 +11,8 @@ class Producto extends Model
         'precio',
         'marca',
         'imagen',
+        'oferta',
+        'descuento',
         'id_usuario',
     ];
 

@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Venta;
 use App\Models\DetalleVenta;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class CarritoController extends Controller
 {
@@ -50,42 +53,87 @@ class CarritoController extends Controller
     public function comprar()
     {
         $userId = Auth::id();
-        $items = Carrito::with('producto')->where('user_id', $userId)->get();
+        $items  = Carrito::with('producto')->where('user_id', $userId)->get();
 
         if ($items->isEmpty()) {
-            return redirect()->back()->with('error', 'El carrito está vacío.');
+            return response()->json([
+                'success' => false,
+                'message' => 'El carrito está vacío.'
+            ], 400);
         }
 
-        $total = 0;
-        foreach ($items as $item) {
-            $total += $item->cantidad * $item->producto->precio;
-        }
+        // 1) Crear Venta y DetalleVenta local
+        $total = $items->sum(function ($item) {
+            return $item->cantidad * $item->producto->precio;
+        });
 
-        
-        // Crear venta
         $venta = Venta::create([
             'user_id' => $userId,
-            'total' => $total,
+            'total'   => $total,
+            // cod_autorizacion vendrá luego
         ]);
 
-        // Crear detalles de venta
         foreach ($items as $item) {
             DetalleVenta::create([
-                'venta_id' => $venta->id,
+                'venta_id'    => $venta->id,
                 'producto_id' => $item->producto_id,
-                'cantidad' => $item->cantidad,
-                'precio' => $item->producto->precio,
+                'cantidad'    => $item->cantidad,
+                'precio'      => $item->producto->precio,
+                'monto'       => $item->cantidad * $item->producto->precio,
             ]);
         }
 
-        // Vaciar carrito
-        Carrito::where('user_id', $userId)->delete();
+        // 2) Preparar el payload para la API externa
+        $payload = [
+            'codigo'      => 19,                      // tu código de empresa
+            'codoperacion' => $venta->id,              // identificador de la venta
+            'fecha'       => Carbon::now()->format('Y-m-d'),
+            'montototal'  => $total,
+            'detalle'     => $items->map(function ($item) {
+                return [
+                    'codproducto' => $item->producto_id,
+                    'cantidad'    => $item->cantidad,
+                    'descripcion' => $item->producto->nombre,        // o como guardes el nombre
+                    'monto'       => $item->cantidad * $item->producto->precio,
+                ];
+            })->toArray(),
+        ];
 
-        return view('carrito.exito', [
-            'venta' => $venta,
-            'detalles' => $venta->detalles,
-        ]);
+        // 3) Enviar y procesar respuesta
+        try {
+            $response = Http::post('http://192.168.63.76/public/api/invoices', $payload);
+
+            Log::info('Envió factura externa:', $payload);
+            Log::info('Respuesta externa:', $response->json());
+
+            if (! $response->successful()) {
+                Log::error('Error al facturar externamente: ' . $response->body());
+                throw new \Exception('API externa devolvió error HTTP ' . $response->status());
+            }
+
+            $data = $response->json();
+            $codAut = $data['codautorizacion'] ?? null;
+
+            if (! $codAut) {
+                throw new \Exception('No vino codautorizacion en la respuesta');
+            }
+
+            // 4) Guardar el código de autorización en la venta
+            $venta->cod_autorizacion = $codAut;
+            $venta->save();
+
+            // 5) Vaciar carrito
+            Carrito::where('user_id', $userId)->delete();
+
+            // 🔄 Redireccionar a la vista de éxito (pasándole el ID de la venta)
+            return redirect()->route('carrito.exito', ['venta' => $venta->id]);
+        } catch (\Exception $e) {
+            Log::error('Excepción facturación externa: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'No se pudo completar la factura: ' . $e->getMessage());
+        }
     }
+
+
     public function factura($id)
     {
         $venta = Venta::with('detalles.producto')->findOrFail($id);

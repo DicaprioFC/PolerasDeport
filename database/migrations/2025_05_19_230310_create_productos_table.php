@@ -17,6 +17,8 @@ return new class extends Migration
             $table->decimal('precio', 8, 2);
             $table->string('marca');
             $table->string('imagen');
+            $table->boolean('oferta')->default(false); // si está en oferta o no
+            $table->decimal('descuento', 5, 2)->nullable(); // porcentaje o monto de descuento
             $table->unsignedBigInteger('id_usuario');
             $table->timestamps();
 
@@ -32,4 +34,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('productos');
     }
+
+    
 };

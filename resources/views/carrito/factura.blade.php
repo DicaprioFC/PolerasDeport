@@ -15,6 +15,10 @@
     <p><strong>Cliente:</strong> {{ Auth::user()->name }}</p>
     <p><strong>Fecha:</strong> {{ $venta->created_at->format('d/m/Y H:i') }}</p>
 
+    @if($venta->cod_autorizacion)
+        <p><strong>Código de Autorización:</strong> {{ $venta->cod_autorizacion }}</p>
+    @endif
+
     <table>
         <thead>
             <tr>

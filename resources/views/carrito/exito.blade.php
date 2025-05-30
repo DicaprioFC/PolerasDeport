@@ -16,7 +16,20 @@
                 <h1 class="text-success text-center mb-4">¡Compra exitosa!</h1>
                 <p class="text-center">Gracias por tu compra.</p>
 
-                <h3 class="mt-4">Resumen de compra:</h3>
+                @if($venta->cod_autorizacion)
+                <div class="alert alert-info text-center">
+                    <strong>Código de Autorización:</strong> {{ $venta->cod_autorizacion }}
+                </div>
+                @endif
+
+                <h3 class="mt-4">Detalles de la operación:</h3>
+                <ul class="list-group mb-4">
+                    <li class="list-group-item"><strong>ID de Venta:</strong> {{ $venta->id }}</li>
+                    <li class="list-group-item"><strong>Total:</strong> Bs {{ number_format($venta->total, 2, ',', '.') }}</li>
+                    <li class="list-group-item"><strong>Código de Autorización:</strong> {{ $venta->cod_autorizacion }}</li>
+                </ul>
+
+                <h4>Resumen de productos:</h4>
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped mt-3 align-middle">
                         <thead class="table-dark">
@@ -29,20 +42,20 @@
                         </thead>
                         <tbody>
                             @foreach($detalles as $detalle)
-                                <tr>
-                                    <td>{{ $detalle->producto->nombre }}</td>
-                                    <td>
-                                        <img src="/{{ $detalle->producto->imagen }}" alt="Imagen del producto" style="width: 60px; height: auto; border-radius: 6px;" />
-                                    </td>
-                                    <td>{{ $detalle->cantidad }}</td>
-                                    <td>{{ number_format($detalle->precio, 2) }}</td>
-                                </tr>
+                            <tr>
+                                <td>{{ $detalle->producto->nombre }}</td>
+                                <td>
+                                    <img src="/{{ $detalle->producto->imagen }}" alt="Imagen del producto" style="width: 60px; height: auto; border-radius: 6px;" />
+                                </td>
+                                <td>{{ $detalle->cantidad }}</td>
+                                <td>{{ number_format($detalle->precio, 2, ',', '.') }}</td>
+                            </tr>
                             @endforeach
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td colspan="3" class="text-end fw-bold">Total:</td>
-                                <td class="fw-bold">Bs {{ number_format($venta->total, 2) }}</td>
+                                <td class="fw-bold">Bs {{ number_format($venta->total, 2, ',', '.') }}</td>
                             </tr>
                         </tfoot>
                     </table>

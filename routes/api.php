@@ -1,31 +1,22 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/api/poleras', function (Request $request) {
-    $marca = $request->query('marca');
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
 
-    $query = DB::table('productos')
-        ->join('users', 'productos.id_usuario', '=', 'users.id')
-        ->select(
-            'productos.id',
-            'productos.nombre',
-            'productos.precio',
-            'productos.marca',
-            'productos.imagen',
-            'users.name as nombre_admin'
-        );
-    if ($marca) {
-        $query->where('productos.marca', $marca);
-    }
+use App\Http\Controllers\Api\ProductoController;
 
-    $poleras = $query->orderByDesc('productos.id')->get();
+Route::get('/ofertas', [ProductoController::class, 'ofertas']);
+Route::post('/ofertas', [ProductoController::class, 'store']);
 
-    return response()->json([
-        'marca_filtrada' => $marca ?? 'todas',
-        'total_poleras' => $poleras->count(),
-        'poleras' => $poleras
-    ]);
-});
+use App\Http\Controllers\Api\VentaController;
+Route::post('/ventas', [VentaController::class, 'store']);
+
+
+
+use App\Http\Controllers\PromocionApiController;
+
+Route::get('/productos/oferta', [PromocionApiController::class, 'productosEnOferta']);

@@ -4,7 +4,9 @@ use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use Illuminate\Support\Facades\Route;
+use App\Models\Venta;
 use App\Http\Controllers\ClienteController;
+use App\Models\DetalleVenta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -29,6 +31,9 @@ use App\Http\Controllers\AdminController;
 Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::post('/admin/store', [AdminController::class, 'store'])->name('admin.store');
+    
+    Route::get('/admin/ofertas', [AdminController::class, 'formOferta'])->name('admin.oferta');
+    Route::post('/admin/ofertas', [AdminController::class, 'storeOferta'])->name('admin.oferta.store');
 });
 
 
@@ -55,11 +60,18 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/factura/{venta}', [CarritoController::class, 'factura'])->name('carrito.factura');
 
-Route::get('/compra-exitosa', function () {
-    return view('carrito.exito');
+//Route::get('/compra-exitosa', function () {
+    //return view('carrito.exito');
+//})->name('carrito.exito');
+
+
+Route::get('/carrito/exito/{venta}', function (Venta $venta) {
+    $detalles = DetalleVenta::with('producto')
+        ->where('venta_id', $venta->id)
+        ->get();
+
+    return view('carrito.exito', compact('venta', 'detalles'));
 })->name('carrito.exito');
-
-
 
 Route::get('/carrito', function () {
     return view('carrito');
@@ -96,5 +108,8 @@ Route::get('/api/poleras', function (Request $request) {
 });
 
 
+use App\Http\Controllers\PromocionController;
 
-require __DIR__.'/auth.php';
+Route::get('/promociones', [PromocionController::class, 'mostrarVista']);
+
+require __DIR__ . '/auth.php';

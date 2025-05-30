@@ -21,7 +21,7 @@
                     <ul class="Nav-links">
                         <li><a href="{{ url('/productos') }}">PRODUCTOS</a></li>
                         <li><a href="{{ url('/ofertas') }}">OFERTAS</a></li>
-                        <li><a href="COMOLLEGAR.php">COMO LLEGAR</a></li>
+                        <li><a href="{{ url('/Promociones') }}">Ofertas de luis</a></li>
                     </ul>
                 </nav>
             </header>

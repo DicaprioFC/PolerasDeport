@@ -57,6 +57,9 @@ class ClienteController extends Controller
 
         return view('clientes/otrasmarcas', compact('productos'));
     }
+
+
+    
     public function productosOfertas()
     {
         $productos = DB::table('productos')

@@ -32,6 +32,7 @@
     <div class="flex justify-center gap-6">
         <a href="" class="hover:underline">Ver Pedidos</a>
         <a href="" class="hover:underline">Reportes</a>
+        <a href="{{ route('admin.oferta') }}" class="hover:underline">Subir Ofertas</a>
         <a href="{{ route('logout') }}" class="hover:underline"
            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             Cerrar sesión
@@ -87,7 +88,6 @@
             <option value="MarcaNike">MarcaNike</option>
             <option value="MarcaMarathon">MarcaMarathon</option>
             <option value="Otras">Otras</option>
-            <option value="Ofertas">Ofertas</option>
         </select>
     </div>
 
