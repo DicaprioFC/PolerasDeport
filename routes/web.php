@@ -31,7 +31,7 @@ use App\Http\Controllers\AdminController;
 Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::post('/admin/store', [AdminController::class, 'store'])->name('admin.store');
-    
+
     Route::get('/admin/ofertas', [AdminController::class, 'formOferta'])->name('admin.oferta');
     Route::post('/admin/ofertas', [AdminController::class, 'storeOferta'])->name('admin.oferta.store');
 });
@@ -61,7 +61,7 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/factura/{venta}', [CarritoController::class, 'factura'])->name('carrito.factura');
 
 //Route::get('/compra-exitosa', function () {
-    //return view('carrito.exito');
+//return view('carrito.exito');
 //})->name('carrito.exito');
 
 
@@ -77,35 +77,18 @@ Route::get('/carrito', function () {
     return view('carrito');
 })->middleware('auth')->name('carrito');
 
+use App\Http\Controllers\ReporteVentaController;
+
+Route::prefix('admin')
+    ->middleware(['auth'])
+    ->group(function () {
+        Route::get('/reportes', [ReporteVentaController::class, 'index'])->name('admin.reportes');
+        Route::post('/reportes/pdf', [ReporteVentaController::class, 'generarPDF'])->name('admin.pdf');
+    });
 
 
+    Route::post('/admin/previsualizar', [ReporteVentaController::class, 'previsualizar'])->name('admin.previsualizar');
 
-Route::get('/api/poleras', function (Request $request) {
-    $marca = $request->query('marca');
-
-    $query = DB::table('productos')
-        ->join('users', 'productos.id_usuario', '=', 'users.id')
-        ->select(
-            'productos.id',
-            'productos.nombre',
-            'productos.precio',
-            'productos.marca',
-            'productos.imagen',
-            'users.name as nombre_admin'
-        );
-
-    if ($marca) {
-        $query->where('productos.marca', $marca);
-    }
-
-    $poleras = $query->orderByDesc('productos.id')->get();
-
-    return response()->json([
-        'marca_filtrada' => $marca ?? 'todas',
-        'total_poleras' => $poleras->count(),
-        'poleras' => $poleras
-    ]);
-});
 
 
 use App\Http\Controllers\PromocionController;

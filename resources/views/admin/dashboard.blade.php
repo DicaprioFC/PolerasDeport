@@ -30,8 +30,7 @@
 
 <nav class="bg-gray-700 text-white py-3">
     <div class="flex justify-center gap-6">
-        <a href="" class="hover:underline">Ver Pedidos</a>
-        <a href="" class="hover:underline">Reportes</a>
+        <a href="{{ route('admin.reportes') }}" class="hover:underline">Reportes</a>
         <a href="{{ route('admin.oferta') }}" class="hover:underline">Subir Ofertas</a>
         <a href="{{ route('logout') }}" class="hover:underline"
            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
