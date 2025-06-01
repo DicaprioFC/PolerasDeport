@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <title>Ofertas De Ropa Deportiva</title>
 </head>
+
 <body>
     <div class="container">
         <header class="header">
@@ -31,31 +33,31 @@
         <h1 class="titulo">Ofertas</h1>
         <div class="contenedor-productos">
             @foreach ($productos as $producto)
-                <div class="producto">
-                    <div class="imagen-con-descuento" style="position: relative;">
-                        <img src="/{{ $producto->imagen }}" alt="Imagen del producto" />
-                        
-                        {{-- Mostrar el porcentaje de descuento dinámicamente --}}
-                        @php
-                            $descuento = $producto->descuento; // porcentaje ej: 40
-                            $precioOriginal = $producto->precio / (1 - $descuento / 100);
-                        @endphp
-                        <span class="etiqueta-descuento" style="position: absolute; top: 10px; left: 10px; background: red; color: white; padding: 4px 8px; border-radius: 4px;">
-                            -{{ number_format($descuento, 0) }}%
-                        </span>
-                    </div>
+            <div class="producto">
+                <div class="imagen-con-descuento" style="position: relative;">
+                    <img src="{{ filter_var($producto->imagen, FILTER_VALIDATE_URL) ? $producto->imagen : asset($producto->imagen) }}" alt="Imagen del producto" />
 
-                    <h2>{{ $producto->nombre }}</h2>
-                    <p>
-                        <span class="precio-anterior" style="text-decoration: line-through; color: gray;">
-                            Bs {{ number_format($precioOriginal, 2) }}
-                        </span>
-                        <span class="precio-descuento" style="color: green; font-weight: bold; margin-left: 10px;">
-                            Bs {{ number_format($producto->precio, 2) }}
-                        </span>
-                    </p>
-                    <a href="{{ route('carrito.agregar', $producto->id) }}" class="btn-agregar-carrito">Agregar al carrito</a>
+
+                    @php
+                    $descuento = $producto->descuento ?? 0;
+                    $precioOriginal = $producto->precio / (1 - $descuento / 100);
+                    @endphp
+                    <span class="etiqueta-descuento" style="position: absolute; top: 10px; left: 10px; background: red; color: white; padding: 4px 8px; border-radius: 4px;">
+                        -{{ number_format($descuento, 0) }}%
+                    </span>
                 </div>
+
+                <h2>{{ $producto->nombre }}</h2>
+                <p>
+                    <span class="precio-anterior" style="text-decoration: line-through; color: gray;">
+                        Bs {{ number_format($precioOriginal, 2) }}
+                    </span>
+                    <span class="precio-descuento" style="color: green; font-weight: bold; margin-left: 10px;">
+                        Bs {{ number_format($producto->precio, 2) }}
+                    </span>
+                </p>
+                <a href="{{ route('carrito.agregar', $producto->id) }}" class="btn-agregar-carrito">Agregar al carrito</a>
+            </div>
             @endforeach
         </div>
 
@@ -107,4 +109,5 @@
         </footer>
     </div>
 </body>
+
 </html>

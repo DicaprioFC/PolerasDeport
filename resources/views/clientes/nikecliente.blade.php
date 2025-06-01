@@ -19,7 +19,7 @@
                 <ul class="Nav-links responsive-links"> <!-- Lista de enlaces de navegación con la clase "responsive-links" -->
                     <li><a href="{{ route('dashboard') }}">INICIO</a></li>
                     <li><a href="{{ url('/productos') }}">PRODUCTOS</a></li>
-                    <li><a href="{{ url('/ofertas') }}">OFERTAS</a></li> <!-- Enlace a "tipo_producto.html" -->
+                    <li><a href="{{ url('/Ofertas') }}">OFERTAS</a></li> <!-- Enlace a "tipo_producto.html" -->
                     <li><a href="como llegar.php">COMO LLEGAR</a></li> <!-- Enlace a "ubicacion.html" -->
                     <div class="carrito-icono">
                         <a href="{{ route('carrito.mostrar') }}">

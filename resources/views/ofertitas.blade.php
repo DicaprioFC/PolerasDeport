@@ -2,67 +2,82 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Promociones de Juegos</title>
+    <title>Promociones de Poleras</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f2f2f2;
+            background-color: #f4f4f4;
+            margin: 0;
             padding: 20px;
         }
-        .grid {
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .oferta-container {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
+            justify-content: center;
         }
-        .card {
-            background: #fff;
+
+        .oferta-card {
+            background-color: white;
             border-radius: 10px;
-            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 16px;
             width: 300px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            position: relative;
+            transition: transform 0.2s ease-in-out;
         }
-        .card img {
+
+        .oferta-card:hover {
+            transform: scale(1.02);
+        }
+
+        .oferta-card img {
             width: 100%;
             height: 200px;
             object-fit: cover;
+            border-radius: 6px;
         }
-        .card-content {
-            padding: 15px;
+
+        .oferta-card h3 {
+            font-size: 18px;
+            margin: 10px 0 6px;
+            color: #222;
         }
-        .card h3 {
-            margin: 0 0 10px;
+
+        .oferta-card p {
+            margin: 4px 0;
         }
-        .promocion-badge {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background-color: #ff5722;
-            color: white;
-            padding: 5px 10px;
+
+        .descuento {
+            color: #0a8754;
             font-weight: bold;
-            border-radius: 5px;
+        }
+
+        .descripcion {
+            color: #555;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
-    <h1>Juegos en Promoción</h1>
+    <h1>Poleras en Promoción</h1>
 
-    <div class="grid">
-        @foreach ($promociones as $promo)
-            <div class="card">
-                <img src="{{ $promo['portada_url'] }}" alt="Portada de {{ $promo['juego_nombre'] }}">
-                <div class="card-content">
-                    <h3>{{ $promo['juego_nombre'] }}</h3>
-                    <p><strong>Promoción:</strong> {{ $promo['promocion_titulo'] }}</p>
-                    <p><strong>Tipo:</strong> {{ $promo['promocion_tipo'] }}</p>
-                    <p><strong>Inicio:</strong> {{ $promo['fecha_inicio'] }}</p>
-                    <p><strong>Fin:</strong> {{ $promo['fecha_fin'] }}</p>
-                </div>
-                <div class="promocion-badge">
-                    -{{ $promo['promocion_valor'] }}%
-                </div>
+    <div class="oferta-container">
+        @foreach($ofertas as $oferta)
+            <div class="oferta-card">
+                <img src="{{ asset($oferta->imagen) }}" alt="{{ $oferta->nombre }}">
+                <h3>{{ $oferta->nombre }}</h3>
+                <p class="descuento">Descuento: {{ $oferta->descuento }}%</p>
+                @if(!empty($oferta->descripcion))
+                    <p class="descripcion">{{ $oferta->descripcion }}</p>
+                @endif
             </div>
         @endforeach
     </div>

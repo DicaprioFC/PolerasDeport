@@ -3,20 +3,17 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-use App\Http\Controllers\Api\ProductoController;
 
-Route::get('/ofertas', [ProductoController::class, 'ofertas']);
-Route::post('/ofertas', [ProductoController::class, 'store']);
+use App\Http\Controllers\Api\OfertaApiController;
 
-use App\Http\Controllers\Api\VentaController;
-Route::post('/ventas', [VentaController::class, 'store']);
+Route::get('/ofertas', [OfertaApiController::class, 'index']);
 
 
+use App\Http\Controllers\PromocionController;
 
-use App\Http\Controllers\PromocionApiController;
-
-Route::get('/productos/oferta', [PromocionApiController::class, 'productosEnOferta']);
+Route::get('/productos/oferta', [PromocionController::class, 'productosEnOferta']);

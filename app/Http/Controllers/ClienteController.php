@@ -66,7 +66,7 @@ class ClienteController extends Controller
             ->where('marca', 'Ofertas')
             ->get();
 
-        return view('clientes/ofertas', compact('productos'));
+        return view('clientes/Ofertas', compact('productos'));
     }
 
 

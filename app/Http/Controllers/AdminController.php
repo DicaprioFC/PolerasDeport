@@ -48,46 +48,38 @@ class AdminController extends Controller
     }
 
 
-    
-
-    // Mostrar formulario para subir productos en oferta
     public function formOferta()
     {
         return view('admin.oferta');
     }
 
-    // Guardar producto con oferta
     public function storeOferta(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|string|max:255',
-            'precio' => 'required|numeric|min:0',
-            'marca' => 'required|string',
-            'imagen' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'descuento' => 'required|numeric|min:0|max:100',
+            'nombre'         => 'required|string|max:255',
+            'descripcion'    => 'nullable|string|max:1000',
+            'precio'         => 'required|numeric|min:0',
+            'marca'          => 'required|string|max:255',
+            'descuento'      => 'required|numeric|min:0|max:100',
+            'imagen_url'     => 'required|url',
         ]);
 
-         // Similar a PHP: mueve imagen manualmente a /public/imagenes/
-         if ($request->hasFile('imagen')) {
-            $file = $request->file('imagen');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $destinationPath = public_path('imagenes'); // esto apunta a /public/imagenes
-            $file->move($destinationPath, $fileName);
-            $rutaImagen = 'imagenes/' . $fileName;
-        } else {
-            return back()->with('error', '❌ Error al subir la imagen.');
-        }
+        // Usamos solo la URL de imagen
+        $rutaImagen = $request->imagen_url;
 
         Producto::create([
-            'nombre' => $request->nombre,
-            'precio' => $request->precio,
-            'marca' => $request->marca,
-            'imagen' => $rutaImagen,
-            'oferta' => true,
-            'descuento' => $request->descuento,
-            'id_usuario' => Auth::id(),
+            'nombre'       => $request->nombre,
+            'precio'       => $request->precio,
+            'marca'        => $request->marca,
+            'imagen'       => $rutaImagen,
+            'oferta'       => true,
+            'descuento'    => $request->descuento,
+            'descripcion'  => $request->descripcion,
+            'id_usuario'   => Auth::id(),
         ]);
 
-        return redirect()->route('admin.oferta')->with('success', 'Producto en oferta guardado correctamente.');
+        return redirect()
+            ->route('admin.oferta')
+            ->with('success', 'Producto en oferta guardado correctamente.');
     }
 }

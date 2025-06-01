@@ -44,7 +44,7 @@ Route::get('/marathoncliente', [ClienteController::class, 'productosMarathon']);
 Route::get('/marcamaracli', [ClienteController::class, 'productosMarcaMarathon']);
 Route::get('/marcanikecli', [ClienteController::class, 'productosMarcaNike']);
 Route::get('/otrasmarcas', [ClienteController::class, 'productosOtrasMarcas']);
-Route::get('/ofertas', [ClienteController::class, 'productosOfertas']);
+Route::get('/Ofertas', [ClienteController::class, 'productosOfertas']);
 Route::get('/productos', [ClienteController::class, 'porMarca'])->name('productosPorMarca');
 
 
@@ -93,6 +93,7 @@ Route::prefix('admin')
 
 use App\Http\Controllers\PromocionController;
 
-Route::get('/promociones', [PromocionController::class, 'mostrarVista']);
+Route::get('/ofertas', [PromocionController::class, 'vistaPublica']);
+
 
 require __DIR__ . '/auth.php';

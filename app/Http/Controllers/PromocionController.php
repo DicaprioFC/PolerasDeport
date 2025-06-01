@@ -1,19 +1,31 @@
 <?php
+
 namespace App\Http\Controllers;
+
+use App\Models\Producto;
 use Illuminate\Support\Facades\Http;
 
 
 class PromocionController extends Controller
 {
 
+    public function vistaPublica()
+{
+    $ofertas = Producto::where('oferta', true)->get();
 
-public function mostrarVista()
-    {
-        // IP de la PC 1 con Laravel (donde corre la API)
-        $respuesta = Http::get('http://192.168.247.225:8000/api/promociones');
+    return view('ofertitas', compact('ofertas'));
+}
 
-        $promociones = $respuesta->json(); // convierte JSON a array
 
-        return view('ofertitas', compact('promociones'));
-    }
+//public function vistaPublica()
+   // {
+         //IP de la PC 1 con Laravel (donde corre la API)
+      // $respuesta = Http::get('http://192.168.100.35:8000/api/ofertas');
+
+       // $ofertas = $respuesta->json(); // convierte JSON a array
+
+      //return view('ofertitas', compact('ofertas'));
+  // }
+
+    
 }
