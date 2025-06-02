@@ -19,6 +19,10 @@
         <p><strong>Código de Autorización:</strong> {{ $venta->cod_autorizacion }}</p>
     @endif
 
+    @if($venta->cuenta_generada)
+        <p><strong>Cuenta Generada:</strong> {{ $venta->cuenta_generada }}</p>
+    @endif
+
     <table>
         <thead>
             <tr>
