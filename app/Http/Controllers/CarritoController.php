@@ -161,6 +161,7 @@ class CarritoController extends Controller
 
 
 
+
     public function factura($id)
     {
         $venta = Venta::with('detalles.producto')->findOrFail($id);
