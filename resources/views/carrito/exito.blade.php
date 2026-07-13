@@ -53,9 +53,9 @@
                             <tr>
                                 <td>{{ $detalle->producto->nombre }}</td>
                                 <td>
-                                    <img src="/{{ $detalle->producto->imagen }}"
-                                         alt="Imagen del producto"
-                                         style="width: 60px; height: auto; border-radius: 6px;" />
+                                    <img src="{{ filter_var($detalle->producto->imagen, FILTER_VALIDATE_URL) ? $detalle->producto->imagen : asset($detalle->producto->imagen) }}"
+                                        alt="Imagen del producto"
+                                        style="width: 60px; height: auto; border-radius: 6px;">
                                 </td>
                                 <td>{{ $detalle->cantidad }}</td>
                                 <td>Bs {{ number_format($detalle->precio, 2, ',', '.') }}</td>

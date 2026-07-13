@@ -47,12 +47,12 @@
 
         <div class="slider">
             <ul>
-                <li><img src="imagenes/banermara4.jpg"></li>
-                <li><img src="imagenes/banermara3.jpg" alt=""></li>
+                <li><img src="imagenes/banner1.jpg" alt=""></li>
+                <li><img src="imagenes/banner2.jpg" alt=""></li>
+                <li><img src="imagenes/banermara3.jpg"></li>
                 <li><img src="imagenes/banermara.jpg" alt=""></li>
                 <li><img src="imagenes/banermara2.jpg" alt=""></li>
                 <li><img src="imagenes/NIKEEEE.jpg" alt=""></li>
-                <li><img src="imagenes/Bolivar.jpg" alt=""></li>
             </ul>
         </div>
     </div>

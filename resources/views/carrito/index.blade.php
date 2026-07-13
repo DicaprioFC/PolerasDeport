@@ -1,21 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="carrito.css"> <!-- Enlaza una hoja de estilo CSS llamada "estilo.css" -->
+    <title>Tu carrito</title>
+
+    <link rel="stylesheet" href="{{ asset('carrito.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
     <h1>Tu carrito</h1>
+
+    @if (session('success'))
+        <div style="background: #d1e7dd; color: #0f5132; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div style="background: #f8d7da; color: #842029; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <a href="{{ route('dashboard') }}">← Volver al inicio</a>
 
     <div class="contenedor-carrito">
 
-        <!-- Lista de productos -->
         <div class="tabla-carrito">
             <table>
                 <thead>
@@ -27,47 +40,70 @@
                         <th></th>
                     </tr>
                 </thead>
+
                 <tbody>
                     @php $total = 0; @endphp
+
                     @foreach($items as $item)
-                    @php
-                    $subtotal = $item->cantidad * $item->producto->precio;
-                    $total += $subtotal;
-                    @endphp
-                    <tr>
-                        <td style="text-align: left;">
-                            <img src="/{{ $item->producto->imagen }}" alt="Producto">
+                        @php
+                            $subtotal = $item->cantidad * $item->producto->precio;
+                            $total += $subtotal;
 
+                            $imagen = $item->producto->imagen;
+                            $imagenLimpia = $imagen ? ltrim($imagen, '/') : null;
 
-                            <div>{{ $item->producto->nombre }}</div>
-                        </td>
-                        <td>
-                            <div class="cantidad-control">
-                                <span>{{ $item->cantidad }}</span>
-                            </div>
-                        </td>
-                        <td>Bs {{ number_format($item->producto->precio, 2) }}</td>
-                        <td>Bs {{ number_format($subtotal, 2) }}</td>
-                        <td>
-                            <form action="{{ route('carrito.eliminar', $item->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button class="eliminar-btn" type="submit"><i class="fas fa-trash"></i></button>
-                            </form>
-                        </td>
-                    </tr>
+                            $srcImagen = filter_var($imagenLimpia, FILTER_VALIDATE_URL)
+                                ? $imagenLimpia
+                                : asset($imagenLimpia ?? 'imagenes/default.png');
+                        @endphp
+
+                        <tr>
+                            <td style="text-align: left;">
+                                <img src="{{ $srcImagen }}"
+                                     alt="{{ $item->producto->nombre }}"
+                                     style="width: 70px; height: 70px; object-fit: contain;">
+
+                                <div>{{ $item->producto->nombre }}</div>
+                            </td>
+
+                            <td>
+                                <div class="cantidad-control">
+                                    <span>{{ $item->cantidad }}</span>
+                                </div>
+                            </td>
+
+                            <td>Bs {{ number_format($item->producto->precio, 2) }}</td>
+
+                            <td>Bs {{ number_format($subtotal, 2) }}</td>
+
+                            <td>
+                                <form action="{{ route('carrito.eliminar', $item->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button class="eliminar-btn" type="submit">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
 
-        <!-- Resumen -->
         <div class="resumen">
             <h3>Resumen de compra</h3>
+
             <p>Subtotal: <strong>Bs {{ number_format($total, 2) }}</strong></p>
-            <form action="{{ route('carrito.comprar') }}" method="POST">
+
+            <form action="{{ route('carrito.paypal') }}" method="POST">
                 @csrf
-                <button type="submit" class="btn-pago">Procesar Pago</button>
+
+                <button type="submit"
+                    style="background: black; color: white; width: 100%; padding: 14px; border-radius: 6px;">
+                    Procesar Pago con PayPal
+                </button>
             </form>
         </div>
 

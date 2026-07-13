@@ -50,32 +50,55 @@ Route::get('/productos', [ClienteController::class, 'porMarca'])->name('producto
 
 use App\Http\Controllers\CarritoController;
 
+
 Route::middleware(['auth'])->group(function () {
-    Route::get('/index', [CarritoController::class, 'mostrar'])->name('carrito.mostrar');
-    Route::get('/carrito/agregar/{id}', [CarritoController::class, 'agregar'])->name('carrito.agregar');
-    Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
-    Route::post('/carrito/comprar', [CarritoController::class, 'comprar'])->name('carrito.comprar');
+
+    // Mostrar carrito
+    Route::get('/carrito', [CarritoController::class, 'mostrar'])
+        ->name('carrito.mostrar');
+
+    // Si antes usabas /index, lo dejamos redirigiendo al carrito
+    Route::get('/index', function () {
+        return redirect()->route('carrito.mostrar');
+    });
+
+    // Agregar producto al carrito
+    Route::get('/carrito/agregar/{id}', [CarritoController::class, 'agregar'])
+        ->name('carrito.agregar');
+
+    // Eliminar producto del carrito
+    Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])
+        ->name('carrito.eliminar');
+
+    // Compra directa anterior, puedes dejarla por si quieres usarla sin PayPal
+    Route::post('/carrito/comprar', [CarritoController::class, 'comprar'])
+        ->name('carrito.comprar');
+
+    // Pagar con PayPal
+    Route::post('/carrito/pagar-paypal', [CarritoController::class, 'pagarConPaypal'])
+        ->name('carrito.paypal');
+
+    // Retorno exitoso desde PayPal
+    Route::get('/paypal/exito', [CarritoController::class, 'paypalExito'])
+        ->name('paypal.exito');
+
+    // Retorno cancelado desde PayPal
+    Route::get('/paypal/cancelado', [CarritoController::class, 'paypalCancelado'])
+        ->name('paypal.cancelado');
+
+    // Vista de compra exitosa
+    Route::get('/carrito/exito/{venta}', function (Venta $venta) {
+        $detalles = DetalleVenta::with('producto')
+            ->where('venta_id', $venta->id)
+            ->get();
+
+        return view('carrito.exito', compact('venta', 'detalles'));
+    })->name('carrito.exito');
+
+    // Descargar factura
+    Route::get('/factura/{venta}', [CarritoController::class, 'factura'])
+        ->name('carrito.factura');
 });
-
-
-Route::get('/factura/{venta}', [CarritoController::class, 'factura'])->name('carrito.factura');
-
-//Route::get('/compra-exitosa', function () {
-//return view('carrito.exito');
-//})->name('carrito.exito');
-
-
-Route::get('/carrito/exito/{venta}', function (Venta $venta) {
-    $detalles = DetalleVenta::with('producto')
-        ->where('venta_id', $venta->id)
-        ->get();
-
-    return view('carrito.exito', compact('venta', 'detalles'));
-})->name('carrito.exito');
-
-Route::get('/carrito', function () {
-    return view('carrito');
-})->middleware('auth')->name('carrito');
 
 use App\Http\Controllers\ReporteVentaController;
 
@@ -97,3 +120,16 @@ Route::get('/ofertas', [PromocionController::class, 'vistaPublica']);
 
 
 require __DIR__ . '/auth.php';
+
+
+
+use App\Http\Controllers\Auth\GoogleAuthController;
+
+Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])
+    ->name('google.redirect');
+
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])
+    ->name('google.callback');
+
+
+   

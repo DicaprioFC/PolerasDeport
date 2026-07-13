@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; // al inicio del archivo si no está
 use Illuminate\Support\Facades\DB;
 use App\Models\Producto;
+use Cloudinary\Cloudinary;
 
 class AdminController extends Controller
 {
@@ -14,37 +15,72 @@ class AdminController extends Controller
         return view('admin.dashboard');
     }
 
+    private function subirImagenCloudinary($imagen): array
+    {
+        $cloudinary = new Cloudinary([
+            'cloud' => [
+                'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                'api_key'    => env('CLOUDINARY_API_KEY'),
+                'api_secret' => env('CLOUDINARY_API_SECRET'),
+            ],
+            'url' => [
+                'secure' => true,
+            ],
+        ]);
+
+        $resultado = $cloudinary->uploadApi()->upload(
+            $imagen->getRealPath(),
+            [
+                'folder' => 'polerasdepor/productos',
+            ]
+        );
+
+        return [
+            'url' => $resultado['secure_url'],
+            'public_id' => $resultado['public_id'],
+        ];
+    }
+
     public function store(Request $request)
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
             'precio' => 'required|numeric',
-            'marca' => 'required|string',
-            'imagen' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'marca'  => 'required|string',
+            'otraMarca' => 'nullable|string|max:255',
+            'imagen' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:4096',
         ]);
 
-        $marca = $request->input('marca') === 'otras' ? $request->input('otraMarca') : $request->input('marca');
+        $marca = $request->input('marca') === 'otras'
+            ? $request->input('otraMarca')
+            : $request->input('marca');
 
-        // Similar a PHP: mueve imagen manualmente a /public/imagenes/
-        if ($request->hasFile('imagen')) {
-            $file = $request->file('imagen');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $destinationPath = public_path('imagenes'); // esto apunta a /public/imagenes
-            $file->move($destinationPath, $fileName);
-            $rutaImagen = 'imagenes/' . $fileName;
-        } else {
+        if (!$request->hasFile('imagen')) {
             return back()->with('error', '❌ Error al subir la imagen.');
         }
 
-        DB::table('productos')->insert([
-            'nombre' => $request->nombre,
-            'precio' => $request->precio,
-            'marca' => $marca,
-            'imagen' => $rutaImagen,
-            'id_usuario' => Auth::id(),
-        ]);
+        try {
+            // Subir imagen a Cloudinary
+            $imagenCloudinary = $this->subirImagenCloudinary($request->file('imagen'));
 
-        return redirect()->route('admin.dashboard')->with('success', '✅ Producto agregado exitosamente.');
+            $rutaImagen = $imagenCloudinary['url'];
+            $imagenPublicId = $imagenCloudinary['public_id'];
+
+            DB::table('productos')->insert([
+                'nombre' => $request->nombre,
+                'precio' => $request->precio,
+                'marca' => $marca,
+                'imagen' => $rutaImagen,
+                'imagen_public_id' => $imagenPublicId,
+                'id_usuario' => Auth::id(),
+            ]);
+
+            return redirect()
+                ->route('admin.dashboard')
+                ->with('success', '✅ Producto agregado exitosamente con imagen en Cloudinary.');
+        } catch (\Throwable $e) {
+            return back()->with('error', '❌ Error al subir la imagen a Cloudinary: ' . $e->getMessage());
+        }
     }
 
 

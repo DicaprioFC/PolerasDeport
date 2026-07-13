@@ -15,6 +15,7 @@ class Producto extends Model
         'descripcion',
         'descuento',
         'id_usuario',
+        'imagen_public_id',
     ];
 
     // Relación: Un producto pertenece a un usuario

@@ -29,7 +29,8 @@
         <div class="contenedor-productos">
             @foreach($productos as $producto)
             <div class="producto">
-                <img src="/{{ $producto->imagen }}" alt="Imagen del producto">
+                <img src="{{ filter_var($producto->imagen, FILTER_VALIDATE_URL) ? $producto->imagen : asset($producto->imagen) }}"
+                    alt="Imagen del producto">
                 <h3>{{ $producto->nombre }}</h3>
                 <p>Precio: Bs {{ number_format($producto->precio, 2) }}</p>
             </div>
