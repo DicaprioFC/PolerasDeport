@@ -63,16 +63,14 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Agregar producto al carrito
-    Route::get('/carrito/agregar/{id}', [CarritoController::class, 'agregar'])
+    Route::post('/carrito/agregar/{id}', [CarritoController::class, 'agregar'])
         ->name('carrito.agregar');
 
     // Eliminar producto del carrito
     Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])
         ->name('carrito.eliminar');
 
-    // Compra directa anterior, puedes dejarla por si quieres usarla sin PayPal
-    Route::post('/carrito/comprar', [CarritoController::class, 'comprar'])
-        ->name('carrito.comprar');
+   
 
     // Pagar con PayPal
     Route::post('/carrito/pagar-paypal', [CarritoController::class, 'pagarConPaypal'])
@@ -86,14 +84,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/paypal/cancelado', [CarritoController::class, 'paypalCancelado'])
         ->name('paypal.cancelado');
 
-    // Vista de compra exitosa
-    Route::get('/carrito/exito/{venta}', function (Venta $venta) {
-        $detalles = DetalleVenta::with('producto')
-            ->where('venta_id', $venta->id)
-            ->get();
-
-        return view('carrito.exito', compact('venta', 'detalles'));
-    })->name('carrito.exito');
+    Route::get('/carrito/exito/{venta}', [CarritoController::class, 'exito'])
+        ->name('carrito.exito');
 
     // Descargar factura
     Route::get('/factura/{venta}', [CarritoController::class, 'factura'])
@@ -110,7 +102,7 @@ Route::prefix('admin')
     });
 
 
-    Route::post('/admin/previsualizar', [ReporteVentaController::class, 'previsualizar'])->name('admin.previsualizar');
+Route::post('/admin/previsualizar', [ReporteVentaController::class, 'previsualizar'])->name('admin.previsualizar');
 
 
 
@@ -130,6 +122,3 @@ Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])
 
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])
     ->name('google.callback');
-
-
-   

@@ -1,123 +1,105 @@
 <?php
 
-// app/Http/Controllers/CarritoController.php
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Carrito;
-use App\Models\Producto;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Venta;
 use App\Models\DetalleVenta;
+use App\Models\Producto;
+use App\Models\Venta;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
+use RuntimeException;
 
 class CarritoController extends Controller
 {
-    public function agregar($id)
+    public function agregar(int $id)
     {
         $producto = Producto::findOrFail($id);
+        $userId = (int) Auth::id();
 
-        $carrito = Carrito::where('user_id', Auth::id())
+        if ((int) $producto->stock <= 0) {
+            return redirect()->back()
+                ->with('error', 'El producto no tiene stock disponible.');
+        }
+
+        $carrito = Carrito::where('user_id', $userId)
             ->where('producto_id', $id)
             ->first();
 
+        $cantidadActual = $carrito ? (int) $carrito->cantidad : 0;
+
+        if ($cantidadActual >= (int) $producto->stock) {
+            return redirect()->back()
+                ->with('error', 'No puedes agregar una cantidad mayor al stock disponible.');
+        }
+
         if ($carrito) {
-            $carrito->cantidad += 1;
-            $carrito->save();
+            $carrito->increment('cantidad');
         } else {
             Carrito::create([
-                'user_id' => Auth::id(),
+                'user_id' => $userId,
                 'producto_id' => $id,
-                'cantidad' => 1
+                'cantidad' => 1,
             ]);
         }
 
-        return redirect()->back()->with('success', 'Producto agregado al carrito');
+        return redirect()->back()
+            ->with('success', 'Producto agregado al carrito.');
     }
 
     public function mostrar()
     {
-        $items = Carrito::with('producto')->where('user_id', Auth::id())->get();
-        return view('carrito.index', compact('items'));
+        $resumen = $this->resumenCarrito((int) Auth::id());
+
+        return view('carrito.index', [
+            'items' => $resumen['items'],
+            'total' => $resumen['total'],
+        ]);
     }
 
-    public function eliminar($id)
+    public function eliminar(int $id)
     {
-        Carrito::where('id', $id)->where('user_id', Auth::id())->delete();
-        return redirect()->back()->with('success', 'Producto eliminado del carrito');
-    }
+        $eliminados = Carrito::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->delete();
 
-    public function comprar()
-    {
-        $userId = Auth::id();
-        $items  = Carrito::with('producto')->where('user_id', $userId)->get();
-
-        if ($items->isEmpty()) {
-            return redirect()->back()->with('error', 'El carrito está vacío.');
+        if ($eliminados === 0) {
+            return redirect()->back()
+                ->with('error', 'El producto no pertenece a tu carrito.');
         }
 
-        $total = $items->sum(function ($item) {
-            return $item->cantidad * $item->producto->precio;
-        });
-
-        $venta = $this->finalizarCompra($userId, $items, $total);
-
-        return redirect()->route('carrito.exito', ['venta' => $venta->id]);
+        return redirect()->back()
+            ->with('success', 'Producto eliminado del carrito.');
     }
-
-    private function obtenerTokenPaypal()
-    {
-        $baseUrl = config('services.paypal.base_url');
-
-        $response = Http::asForm()
-            ->withBasicAuth(
-                config('services.paypal.client_id'),
-                config('services.paypal.client_secret')
-            )
-            ->post($baseUrl . '/v1/oauth2/token', [
-                'grant_type' => 'client_credentials',
-            ]);
-
-        if (!$response->successful()) {
-            Log::error('PAYPAL TOKEN ERROR: ' . $response->body());
-            throw new \Exception('No se pudo obtener el token de PayPal.');
-        }
-
-        return $response->json()['access_token'];
-    }
-
-
-    public function factura($id)
-    {
-        $venta = Venta::with('detalles.producto')->findOrFail($id);
-
-        $pdf = Pdf::loadView('carrito.factura', ['venta' => $venta]);
-
-        return $pdf->download('factura-compra.pdf');
-    }
-
     public function pagarConPaypal()
     {
-        $userId = Auth::id();
-
-        $items = Carrito::with('producto')->where('user_id', $userId)->get();
-
-        if ($items->isEmpty()) {
-            return redirect()->back()->with('error', 'El carrito está vacío.');
-        }
-
-        $totalBs = $items->sum(function ($item) {
-            return $item->cantidad * $item->producto->precio;
-        });
-
-        $tasaCambio = (float) config('services.paypal.bob_rate', 6.96);
-        $totalUsd = round($totalBs / $tasaCambio, 2);
+        $userId = (int) Auth::id();
 
         try {
-            $baseUrl = config('services.paypal.base_url');
+            $resumen = $this->resumenCarrito($userId);
+            $items = $resumen['items'];
+            $totalBs = $resumen['total'];
+
+            if ($items->isEmpty()) {
+                return redirect()->route('carrito.mostrar')
+                    ->with('error', 'El carrito está vacío.');
+            }
+
+            $this->validarStock($items);
+
+            $tasaCambio = (float) config('services.paypal.bob_rate', 6.96);
+
+            if ($tasaCambio <= 0) {
+                throw new RuntimeException('La tasa de cambio configurada no es válida.');
+            }
+
+            $totalUsd = round($totalBs / $tasaCambio, 2);
+            $currency = (string) config('services.paypal.currency', 'USD');
+            $baseUrl = (string) config('services.paypal.base_url');
             $accessToken = $this->obtenerTokenPaypal();
 
             $response = Http::withToken($accessToken)
@@ -125,15 +107,15 @@ class CarritoController extends Controller
                     'intent' => 'CAPTURE',
                     'purchase_units' => [
                         [
-                            'description' => 'Compra en PolerasDepor',
+                            'description' => 'Compra en LF-Store',
                             'amount' => [
-                                'currency_code' => config('services.paypal.currency', 'USD'),
+                                'currency_code' => $currency,
                                 'value' => number_format($totalUsd, 2, '.', ''),
                             ],
                         ],
                     ],
                     'application_context' => [
-                        'brand_name' => 'PolerasDepor',
+                        'brand_name' => 'LF-Store',
                         'user_action' => 'PAY_NOW',
                         'return_url' => route('paypal.exito'),
                         'cancel_url' => route('paypal.cancelado'),
@@ -141,189 +123,354 @@ class CarritoController extends Controller
                 ]);
 
             if (!$response->successful()) {
-                Log::error('PAYPAL CREATE ORDER ERROR: ' . $response->body());
-                return redirect()->back()->with('error', 'No se pudo crear la orden de pago.');
+                Log::error('PAYPAL CREATE ORDER ERROR', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+
+                return redirect()->route('carrito.mostrar')
+                    ->with('error', 'No se pudo crear la orden de pago.');
             }
 
             $orden = $response->json();
+            $orderId = $orden['id'] ?? null;
+
+            if (!$orderId) {
+                return redirect()->route('carrito.mostrar')
+                    ->with('error', 'PayPal no devolvió un identificador de orden.');
+            }
+
+            session([
+                'paypal_order_id' => $orderId,
+                'paypal_user_id' => $userId,
+                'paypal_total_bs' => $totalBs,
+                'paypal_total_usd' => $totalUsd,
+                'paypal_currency' => $currency,
+            ]);
 
             foreach ($orden['links'] ?? [] as $link) {
-                if ($link['rel'] === 'approve') {
+                if (($link['rel'] ?? null) === 'approve') {
                     return redirect()->away($link['href']);
                 }
             }
 
-            return redirect()->back()->with('error', 'No se encontró el enlace de aprobación de PayPal.');
-        } catch (\Exception $e) {
-            Log::error('PAYPAL ERROR: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Error al conectar con PayPal.');
+            return redirect()->route('carrito.mostrar')
+                ->with('error', 'No se encontró el enlace de aprobación de PayPal.');
+        } catch (\Throwable $e) {
+            Log::error('PAYPAL CREATE ORDER EXCEPTION', [
+                'user_id' => $userId,
+                'message' => $e->getMessage(),
+            ]);
+
+            return redirect()->route('carrito.mostrar')
+                ->with('error', $e->getMessage());
         }
     }
+
     public function paypalExito(Request $request)
     {
-        $orderId = $request->query('token');
+        $orderId = (string) $request->query('token');
+        $sessionOrderId = (string) session('paypal_order_id');
+        $sessionUserId = (int) session('paypal_user_id');
+        $userId = (int) Auth::id();
 
-        if (!$orderId) {
+        if ($orderId === '') {
             return redirect()->route('carrito.mostrar')
-                ->with('error', 'No se recibió el token de PayPal.');
+                ->with('error', 'No se recibió el identificador de la orden de PayPal.');
+        }
+
+        if ($sessionOrderId === '' || !hash_equals($sessionOrderId, $orderId)) {
+            return redirect()->route('carrito.mostrar')
+                ->with('error', 'La orden recibida no corresponde al pago iniciado.');
+        }
+
+        if ($sessionUserId !== $userId) {
+            abort(403, 'La orden de PayPal no pertenece al usuario autenticado.');
         }
 
         try {
-            $baseUrl = config('services.paypal.base_url');
+            $resumen = $this->resumenCarrito($userId);
+
+            if ($resumen['items']->isEmpty()) {
+                return redirect()->route('carrito.mostrar')
+                    ->with('error', 'El carrito está vacío o ya fue procesado.');
+            }
+
+            $totalEsperadoBs = (float) session('paypal_total_bs');
+
+            if (abs($resumen['total'] - $totalEsperadoBs) > 0.01) {
+                return redirect()->route('carrito.mostrar')
+                    ->with('error', 'El total del carrito cambió. Debes iniciar nuevamente el pago.');
+            }
+
+            $this->validarStock($resumen['items']);
+
+            $baseUrl = (string) config('services.paypal.base_url');
             $accessToken = $this->obtenerTokenPaypal();
 
-            $url = $baseUrl . "/v2/checkout/orders/{$orderId}/capture";
-
             $response = Http::withToken($accessToken)
-                ->withHeaders([
-                    'Accept' => 'application/json',
-                    'Content-Type' => 'application/json',
-                ])
-                ->send('POST', $url, [
-                    'body' => '{}',
-                ]);
+                ->acceptJson()
+                ->withBody('{}', 'application/json')
+                ->post($baseUrl . "/v2/checkout/orders/{$orderId}/capture");
 
-            Log::info('>>> PAYPAL CAPTURE STATUS: ' . $response->status());
-            Log::info('>>> PAYPAL CAPTURE BODY: ' . $response->body());
+            Log::info('PAYPAL CAPTURE RESPONSE', [
+                'order_id' => $orderId,
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
 
             if (!$response->successful()) {
-                Log::error('PAYPAL CAPTURE ERROR: ' . $response->body());
-
                 return redirect()->route('carrito.mostrar')
-                    ->with('error', 'PayPal no pudo confirmar el pago. Revisa el log.');
+                    ->with('error', 'PayPal no pudo confirmar el pago.');
             }
 
             $data = $response->json();
 
             if (($data['status'] ?? null) !== 'COMPLETED') {
                 return redirect()->route('carrito.mostrar')
-                    ->with('error', 'El pago no fue completado. Estado: ' . ($data['status'] ?? 'sin estado'));
+                    ->with(
+                        'error',
+                        'El pago no fue completado. Estado: ' . ($data['status'] ?? 'sin estado')
+                    );
             }
 
-            $userId = Auth::id();
+            $capturedValue = (float) data_get(
+                $data,
+                'purchase_units.0.payments.captures.0.amount.value',
+                0
+            );
+            $capturedCurrency = (string) data_get(
+                $data,
+                'purchase_units.0.payments.captures.0.amount.currency_code',
+                ''
+            );
 
-            $items = Carrito::with('producto')
-                ->where('user_id', $userId)
-                ->get();
+            $expectedUsd = (float) session('paypal_total_usd');
+            $expectedCurrency = (string) session('paypal_currency');
 
-            if ($items->isEmpty()) {
+            if (
+                abs($capturedValue - $expectedUsd) > 0.01 ||
+                $capturedCurrency !== $expectedCurrency
+            ) {
+                Log::critical('PAYPAL CAPTURE AMOUNT MISMATCH', [
+                    'order_id' => $orderId,
+                    'expected_value' => $expectedUsd,
+                    'captured_value' => $capturedValue,
+                    'expected_currency' => $expectedCurrency,
+                    'captured_currency' => $capturedCurrency,
+                ]);
+
                 return redirect()->route('carrito.mostrar')
-                    ->with('error', 'El carrito está vacío o ya fue procesado.');
+                    ->with('error', 'El monto confirmado por PayPal no coincide con la compra.');
             }
 
-            $total = $items->sum(function ($item) {
-                return $item->cantidad * $item->producto->precio;
-            });
+            $venta = $this->finalizarCompra(
+                $userId,
+                $resumen['items'],
+                $totalEsperadoBs
+            );
 
-            $venta = $this->finalizarCompra($userId, $items, $total);
+            $this->limpiarSesionPaypal();
 
             return redirect()->route('carrito.exito', ['venta' => $venta->id])
                 ->with('success', 'Pago realizado correctamente con PayPal.');
         } catch (\Throwable $e) {
-            Log::error('PAYPAL EXITO ERROR: ' . $e->getMessage());
+            Log::error('PAYPAL CHECKOUT ERROR', [
+                'order_id' => $orderId,
+                'user_id' => $userId,
+                'message' => $e->getMessage(),
+            ]);
 
             return redirect()->route('carrito.mostrar')
-                ->with('error', 'Error interno al finalizar la compra: ' . $e->getMessage());
+                ->with('error', 'No se pudo finalizar la compra: ' . $e->getMessage());
         }
     }
+
     public function paypalCancelado()
     {
-        return redirect('/carrito')->with('error', 'Pago cancelado por el usuario.');
+        $this->limpiarSesionPaypal();
+
+        return redirect()->route('carrito.mostrar')
+            ->with('error', 'Pago cancelado. El carrito se mantiene disponible.');
     }
 
-    private function finalizarCompra($userId, $items, $total)
+    public function factura(Venta $venta)
     {
-        // 1) Crear Venta
-        $venta = Venta::create([
-            'user_id' => $userId,
-            'total'   => $total,
+        $this->autorizarVenta($venta);
+        $venta->load('detalles.producto');
+
+        $pdf = Pdf::loadView('carrito.factura', [
+            'venta' => $venta,
         ]);
 
-        // 2) Crear DetalleVenta
+        return $pdf->download('factura-compra-' . $venta->id . '.pdf');
+    }
+
+    private function resumenCarrito(int $userId): array
+    {
+        $items = Carrito::with('producto')
+            ->where('user_id', $userId)
+            ->get();
+
+        $total = (float) $items->sum(function ($item) {
+            if (!$item->producto) {
+                throw new RuntimeException(
+                    "El producto {$item->producto_id} ya no se encuentra disponible."
+                );
+            }
+
+            return (int) $item->cantidad * (float) $item->producto->precio;
+        });
+
+        return compact('items', 'total');
+    }
+
+    private function validarStock($items): void
+    {
         foreach ($items as $item) {
-            DetalleVenta::create([
-                'venta_id'    => $venta->id,
-                'producto_id' => $item->producto_id,
-                'cantidad'    => $item->cantidad,
-                'precio'      => $item->producto->precio,
-                'monto'       => $item->cantidad * $item->producto->precio,
-            ]);
-        }
-
-        // 3) API de facturación
-        try {
-            $facturaPayload = [
-                'codigo'       => 19,
-                'codoperacion' => $venta->id,
-                'fecha'        => Carbon::now()->format('Y-m-d'),
-                'montototal'   => $total,
-                'detalle'      => $items->map(function ($item) {
-                    return [
-                        'codproducto' => $item->producto_id,
-                        'cantidad'    => $item->cantidad,
-                        'descripcion' => $item->producto->nombre,
-                        'monto'       => $item->cantidad * $item->producto->precio,
-                    ];
-                })->toArray(),
-            ];
-
-            $facturaResp = Http::post('http://192.168.1.104/public/api/invoices', $facturaPayload);
-
-            Log::info('>>> FACTURACIÓN: Payload enviado:', $facturaPayload);
-            Log::info('>>> FACTURACIÓN: Respuesta:', [
-                'respuesta' => $facturaResp->json(),
-                'body' => $facturaResp->body(),
-            ]);
-
-            if ($facturaResp->successful()) {
-                $facturaData = $facturaResp->json();
-                $codAut = $facturaData['codautorizacion'] ?? null;
-
-                if ($codAut) {
-                    $venta->cod_autorizacion = $codAut;
-                    $venta->save();
-                }
-            } else {
-                Log::error("Facturación: error HTTP {$facturaResp->status()} - " . $facturaResp->body());
+            if (!$item->producto) {
+                throw new RuntimeException(
+                    "El producto {$item->producto_id} ya no existe."
+                );
             }
-        } catch (\Exception $e) {
-            Log::error("Excepción en facturación: " . $e->getMessage());
+
+            if ((int) $item->cantidad <= 0) {
+                throw new RuntimeException('La cantidad de un producto no es válida.');
+            }
+
+            if ((int) $item->cantidad > (int) $item->producto->stock) {
+                throw new RuntimeException(
+                    "No existe stock suficiente para {$item->producto->nombre}."
+                );
+            }
         }
+    }
 
-        // 4) API de contabilidad
-        try {
-            $contabPayload = [
-                'CodigoEmpresa' => 19,
-                'Fecha'         => Carbon::now()->format('Y-m-d'),
-                'Monto'         => $total,
-            ];
+    private function obtenerTokenPaypal(): string
+    {
+        $baseUrl = (string) config('services.paypal.base_url');
 
-            $contabResp = Http::post('http://192.168.1.101:50570/api/transaccion/registrar', $contabPayload);
-
-            Log::info('>>> CONTABILIDAD: Payload enviado:', $contabPayload);
-            Log::info('>>> CONTABILIDAD: Respuesta:', [
-                'respuesta' => $contabResp->json(),
-                'body' => $contabResp->body(),
+        $response = Http::asForm()
+            ->withBasicAuth(
+                (string) config('services.paypal.client_id'),
+                (string) config('services.paypal.client_secret')
+            )
+            ->post($baseUrl . '/v1/oauth2/token', [
+                'grant_type' => 'client_credentials',
             ]);
 
-            if ($contabResp->successful()) {
-                $contabData = $contabResp->json();
-                $cuentaGen = $contabData['cuenta_generada'] ?? null;
+        if (!$response->successful()) {
+            Log::error('PAYPAL TOKEN ERROR', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
 
-                if ($cuentaGen) {
-                    $venta->cuenta_generada = $cuentaGen;
-                    $venta->save();
-                }
-            } else {
-                Log::error("Contabilidad: error HTTP {$contabResp->status()} - " . $contabResp->body());
-            }
-        } catch (\Exception $e) {
-            Log::error("Excepción en contabilidad: " . $e->getMessage());
+            throw new RuntimeException('No se pudo obtener el token de PayPal.');
         }
 
-        // 5) Vaciar carrito
-        Carrito::where('user_id', $userId)->delete();
+        $token = $response->json('access_token');
 
-        return $venta;
+        if (!$token) {
+            throw new RuntimeException('PayPal no devolvió un token de acceso.');
+        }
+
+        return (string) $token;
+    }
+
+    private function finalizarCompra(int $userId, $items, float $totalEsperado): Venta
+    {
+        return DB::transaction(function () use ($userId, $items, $totalEsperado) {
+            $detalles = [];
+            $totalCalculado = 0.0;
+
+            foreach ($items as $item) {
+                $producto = Producto::whereKey($item->producto_id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
+
+                $cantidad = (int) $item->cantidad;
+
+                if ($cantidad <= 0) {
+                    throw new RuntimeException('La cantidad de un producto no es válida.');
+                }
+
+                if ((int) $producto->stock < $cantidad) {
+                    throw new RuntimeException(
+                        "No existe stock suficiente para {$producto->nombre}."
+                    );
+                }
+
+                $precio = (float) $producto->precio;
+                $subtotal = $cantidad * $precio;
+                $totalCalculado += $subtotal;
+
+                $detalles[] = [
+                    'producto' => $producto,
+                    'producto_id' => $producto->id,
+                    'cantidad' => $cantidad,
+                    'precio' => $precio,
+                    'monto' => $subtotal,
+                ];
+            }
+
+            if (abs($totalCalculado - $totalEsperado) > 0.01) {
+                throw new RuntimeException(
+                    'El total actual de la compra no coincide con el monto pagado.'
+                );
+            }
+
+            $venta = Venta::create([
+                'user_id' => $userId,
+                'total' => $totalCalculado,
+            ]);
+
+            foreach ($detalles as $detalle) {
+                DetalleVenta::create([
+                    'venta_id' => $venta->id,
+                    'producto_id' => $detalle['producto_id'],
+                    'cantidad' => $detalle['cantidad'],
+                    'precio' => $detalle['precio'],
+                    'monto' => $detalle['monto'],
+                ]);
+
+                $detalle['producto']->decrement('stock', $detalle['cantidad']);
+            }
+
+            Carrito::where('user_id', $userId)->delete();
+
+            return $venta;
+        }, 3);
+    }
+
+    private function autorizarVenta(Venta $venta): void
+    {
+        $userId = (int) Auth::id();
+        $esAdministrador = $userId === 1;
+        $esPropietario = (int) $venta->user_id === $userId;
+
+        if (!$esAdministrador && !$esPropietario) {
+            abort(403, 'No tienes permiso para consultar esta venta.');
+        }
+    }
+
+    private function limpiarSesionPaypal(): void
+    {
+        session()->forget([
+            'paypal_order_id',
+            'paypal_user_id',
+            'paypal_total_bs',
+            'paypal_total_usd',
+            'paypal_currency',
+        ]);
+    }
+    public function exito(Venta $venta)
+    {
+        $this->autorizarVenta($venta);
+        $venta->load('detalles.producto');
+
+        return view('carrito.exito', [
+            'venta' => $venta,
+            'detalles' => $venta->detalles,
+        ]);
     }
 }

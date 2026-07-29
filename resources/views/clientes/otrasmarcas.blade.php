@@ -41,8 +41,15 @@
                 <h2>{{ $producto->nombre }}</h2>
                 <p>Precio: Bs {{ number_format($producto->precio, 2) }}</p>
                 <!-- En tu foreach de productos -->
-                <a href="{{ route('carrito.agregar', $producto->id) }}" class="btn-agregar-carrito">Agregar al carrito</a>
+                <form
+                    action="{{ route('carrito.agregar', $producto->id) }}"
+                    method="POST">
+                    @csrf
 
+                    <button type="submit">
+                        Agregar al carrito
+                    </button>
+                </form>
             </div>
             @endforeach
         </div>

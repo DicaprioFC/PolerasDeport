@@ -56,7 +56,15 @@
                         Bs {{ number_format($producto->precio, 2) }}
                     </span>
                 </p>
-                <a href="{{ route('carrito.agregar', $producto->id) }}" class="btn-agregar-carrito">Agregar al carrito</a>
+                <form
+                    action="{{ route('carrito.agregar', $producto->id) }}"
+                    method="POST">
+                    @csrf
+
+                    <button type="submit">
+                        Agregar al carrito
+                    </button>
+                </form>
             </div>
             @endforeach
         </div>
