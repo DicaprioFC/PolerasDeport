@@ -16,6 +16,14 @@ class Producto extends Model
         'descuento',
         'id_usuario',
         'imagen_public_id',
+        'stock',
+    ];
+
+    protected $casts = [
+        'precio' => 'decimal:2',
+        'descuento' => 'decimal:2',
+        'oferta' => 'boolean',
+        'stock' => 'integer',
     ];
 
     // Relación: Un producto pertenece a un usuario
